@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Preview Card Generator</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #1a1a1a;
+      color: #fff;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+    }
+
+    #preview-container {
+      background: #000;
+      border: 2px solid #66FCF1;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 8px 32px rgba(102, 252, 241, 0.3);
+    }
+
+    #canvas {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .controls {
+      background: #222;
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 800px;
+      width: 100%;
+      border: 1px solid #333;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #66FCF1;
+      font-size: 2rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .control-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #CCC;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    input[type="text"],
+    input[type="url"],
+    select {
+      width: 100%;
+      padding: 12px;
+      background: #111;
+      border: 1px solid #444;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="url"]:focus,
+    select:focus {
+      outline: none;
+      border-color: #66FCF1;
+    }
+
+    button {
+      background: linear-gradient(135deg, #66FCF1 0%, #45A29E 100%);
+      color: #111;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 252, 241, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .info {
+      background: rgba(102, 252, 241, 0.1);
+      border: 1px solid rgba(102, 252, 241, 0.3);
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: #CCC;
+    }
+
+    .info strong {
+      color: #66FCF1;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎨 Social Preview Card Generator</h1>
+  
+  <div class="info">
+    <strong>Instructions:</strong> This tool generates a 1200×630px Open Graph image optimized for Reddit and social media. 
+    Customize the fields below, then click "Generate & Download" to create your preview card.
+  </div>
+
+  <div id="preview-container">
+    <canvas id="canvas" width="1200" height="630"></canvas>
+  </div>
+
+  <div class="controls">
+    <div class="control-group">
+      <label for="title">Title</label>
+      <input type="text" id="title" value="S. Yoga Vignesh" />
+    </div>
+
+    <div class="control-group">
+      <label for="subtitle">Subtitle</label>
+      <input type="text" id="subtitle" value="Mechanical Engineer & Full Stack Developer" />
+    </div>
+
+    <div class="control-group">
+      <label for="tagline">Tagline</label>
+      <input type="text" id="tagline" value="3 Hackathon Wins | ₹43L+ Cost Savings | 99.2% Accuracy in Computer Vision" />
+    </div>
+
+    <div class="control-group">
+      <label for="imageUrl">Background Image URL (optional)</label>
+      <input type="url" id="imageUrl" placeholder="https://your-image-url.jpg" />
+    </div>
+
+    <div class="control-group">
+      <label for="theme">Theme</label>
+      <select id="theme">
+        <option value="dark">Dark (Cinematic)</option>
+        <option value="gradient">Gradient (Modern)</option>
+        <option value="mechanical">Mechanical (Industrial)</option>
+      </select>
+    </div>
+
+    <button onclick="generateCard()">Generate & Download</button>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    function drawCard() {
+      const title = document.getElementById('title').value;
+      const subtitle = document.getElementById('subtitle').value;
+      const tagline = document.getElementById('tagline').value;
+      const theme = document.getElementById('theme').value;
+      const imageUrl = document.getElementById('imageUrl').value;
+
+      // Clear canvas
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, 1200, 630);
+
+      // Apply theme
+      if (theme === 'dark') {
+        // Dark cinematic theme
+        const gradient = ctx.createLinearGradient(0, 0, 1200, 630);
+        gradient.addColorStop(0, '#0A0A0A');
+        gradient.addColorStop(1, '#1A1A1A');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, 1200, 630);
+
+        // Vignette effect
+        const vignette = ctx.createRadialGradient(600, 315, 100, 600, 315, 800);
+        vignette.addColorStop(0, 'rgba(0, 0, 0, 0)');
+        vignette.addColorStop(1, 'rgba(0, 0, 0, 0.7)');
+        ctx.fillStyle = vignette;
+        ctx.fillRect(0, 0, 1200, 630);
+      } else if (theme === 'gradient') {
+        // Modern gradient theme
+        const gradient = ctx.createLinearGradient(0, 0, 1200, 630);
+        gradient.addColorStop(0, '#0F2027');
+        gradient.addColorStop(0.5, '#203A43');
+        gradient.addColorStop(1, '#2C5364');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, 1200, 630);
+      } else if (theme === 'mechanical') {
+        // Mechanical industrial theme
+        ctx.fillStyle = '#1A1A1A';
+        ctx.fillRect(0, 0, 1200, 630);
+
+        // Grid pattern
+        ctx.strokeStyle = 'rgba(102, 252, 241, 0.1)';
+        ctx.lineWidth = 1;
+        for (let i = 0; i < 1200; i += 40) {
+          ctx.beginPath();
+          ctx.moveTo(i, 0);
+          ctx.lineTo(i, 630);
+          ctx.stroke();
+        }
+        for (let i = 0; i < 630; i += 40) {
+          ctx.beginPath();
+          ctx.moveTo(0, i);
+          ctx.lineTo(1200, i);
+          ctx.stroke();
+        }
+      }
+
+      // Accent bar
+      const accentGradient = ctx.createLinearGradient(0, 0, 1200, 0);
+      accentGradient.addColorStop(0, '#66FCF1');
+      accentGradient.addColorStop(1, '#45A29E');
+      ctx.fillStyle = accentGradient;
+      ctx.fillRect(0, 0, 1200, 8);
+
+      // Title
+      ctx.fillStyle = '#EAEAEA';
+      ctx.font = 'bold 72px Inter, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(title, 80, 220);
+
+      // Subtitle
+      ctx.fillStyle = '#66FCF1';
+      ctx.font = '600 36px Inter, sans-serif';
+      ctx.fillText(subtitle, 80, 280);
+
+      // Tagline
+      ctx.fillStyle = '#999';
+      ctx.font = '500 24px Inter, sans-serif';
+      const maxWidth = 1040;
+      const words = tagline.split(' ');
+      let line = '';
+      let y = 360;
+
+      words.forEach(word => {
+        const testLine = line + word + ' ';
+        const metrics = ctx.measureText(testLine);
+        if (metrics.width > maxWidth && line !== '') {
+          ctx.fillText(line, 80, y);
+          line = word + ' ';
+          y += 35;
+        } else {
+          line = testLine;
+        }
+      });
+      ctx.fillText(line, 80, y);
+
+      // Footer badge
+      ctx.fillStyle = 'rgba(102, 252, 241, 0.2)';
+      ctx.fillRect(80, 520, 300, 60);
+      ctx.fillStyle = '#66FCF1';
+      ctx.font = 'bold 20px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('VIEW PORTFOLIO', 230, 557);
+
+      // Logo/Icon (simple gear shape)
+      ctx.save();
+      ctx.translate(1050, 550);
+      ctx.fillStyle = '#66FCF1';
+      ctx.beginPath();
+      for (let i = 0; i < 8; i++) {
+        const angle = (i * Math.PI * 2) / 8;
+        const x = Math.cos(angle) * 40;
+        const y = Math.sin(angle) * 40;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = '#1A1A1A';
+      ctx.beginPath();
+      ctx.arc(0, 0, 20, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function generateCard() {
+      drawCard();
+      
+      // Download
+      const link = document.createElement('a');
+      link.download = 'og-preview-card.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    // Initial draw
+    drawCard();
+
+    // Redraw on input change
+    document.querySelectorAll('input, select').forEach(el => {
+      el.addEventListener('input', drawCard);
+    });
+  </script>
+</body>
+</html>

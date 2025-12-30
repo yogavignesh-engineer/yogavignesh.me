@@ -1,0 +1,805 @@
+/* ==========================================
+   VIGNESH YOGA - ATS-FRIENDLY RESUME STYLES
+   Modern | Professional | Print-Optimized
+   ========================================== */
+
+/* ==================== ROOT VARIABLES ==================== */
+:root {
+    /* Colors */
+    --primary-color: #0066FF;
+    --secondary-color: #66FCF1;
+    --accent-color: #FFCC00;
+    --dark: #0A0A0A;
+    --dark-gray: #1A1A1A;
+    --medium-gray: #404040;
+    --light-gray: #808080;
+    --bg-light: #F5F5F5;
+    --white: #FFFFFF;
+    
+    /* Typography */
+    --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-display: 'Oswald', 'Arial Narrow', sans-serif;
+    --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+    
+    /* Spacing */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-2xl: 48px;
+    
+    /* Borders */
+    --border-radius: 4px;
+    --border-color: #E0E0E0;
+}
+
+/* ==================== RESET & BASE ==================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-primary);
+    font-size: 10.5pt;
+    line-height: 1.5;
+    color: var(--dark);
+    background: var(--bg-light);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==================== PRINT CONTROLS ==================== */
+.print-controls {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.print-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: var(--border-radius);
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(0, 102, 255, 0.3);
+    transition: all 0.2s ease;
+}
+
+.print-btn:hover {
+    background: #0052CC;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 102, 255, 0.4);
+}
+
+.print-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* ==================== RESUME PAGE ==================== */
+.resume-page {
+    max-width: 850px;
+    margin: 40px auto;
+    background: white;
+    padding: 48px 56px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+}
+
+/* ==================== HEADER ==================== */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: var(--spacing-xl);
+    border-bottom: 3px solid var(--primary-color);
+    margin-bottom: var(--spacing-xl);
+}
+
+.header-left {
+    flex: 1;
+}
+
+.name-block {
+    margin-bottom: var(--spacing-md);
+}
+
+.name {
+    font-family: var(--font-display);
+    font-size: 42pt;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--dark);
+    line-height: 1;
+    margin-bottom: var(--spacing-xs);
+}
+
+.tagline {
+    font-family: var(--font-mono);
+    font-size: 11pt;
+    font-weight: 600;
+    color: var(--primary-color);
+    letter-spacing: 0.5px;
+}
+
+/* Contact Grid */
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-sm);
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 9.5pt;
+    color: var(--medium-gray);
+}
+
+.contact-item .icon {
+    width: 14px;
+    height: 14px;
+    color: var(--primary-color);
+    flex-shrink: 0;
+}
+
+/* Badge Container */
+.header-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--spacing-md);
+}
+
+.badge-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--spacing-sm);
+}
+
+.availability-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #E8F5E9;
+    color: #2E7D32;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 9pt;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #4CAF50;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.cgpa-badge {
+    background: linear-gradient(135deg, var(--primary-color), #0052CC);
+    color: white;
+    padding: 12px 20px;
+    border-radius: var(--border-radius);
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 102, 255, 0.2);
+}
+
+.cgpa-number {
+    font-family: var(--font-display);
+    font-size: 28pt;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.cgpa-label {
+    font-size: 8pt;
+    font-weight: 600;
+    letter-spacing: 1px;
+    opacity: 0.9;
+}
+
+/* ==================== SECTIONS ==================== */
+.section {
+    margin-bottom: var(--spacing-2xl);
+}
+
+.section-title {
+    font-family: var(--font-display);
+    font-size: 18pt;
+    font-weight: 700;
+    color: var(--dark);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: var(--spacing-sm);
+}
+
+.title-index {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: var(--primary-color);
+    color: white;
+    font-size: 12pt;
+    font-weight: 700;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+}
+
+/* ==================== PROFESSIONAL SUMMARY ==================== */
+.summary-content {
+    background: linear-gradient(135deg, #F0F7FF, #E8F5FF);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--primary-color);
+}
+
+.summary-text {
+    font-size: 10.5pt;
+    line-height: 1.7;
+    color: var(--dark);
+    margin-bottom: var(--spacing-md);
+}
+
+.summary-text strong {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.highlight-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+
+.tag {
+    background: white;
+    color: var(--primary-color);
+    font-size: 8.5pt;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--primary-color);
+}
+
+/* ==================== EDUCATION ==================== */
+.education-block {
+    background: #FAFAFA;
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+}
+
+.edu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-md);
+}
+
+.edu-degree {
+    font-size: 12pt;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 4px;
+}
+
+.edu-institution {
+    font-size: 10pt;
+    color: var(--medium-gray);
+    font-weight: 500;
+}
+
+.edu-meta {
+    text-align: right;
+}
+
+.edu-year {
+    font-size: 10pt;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 2px;
+}
+
+.edu-cgpa {
+    font-size: 9pt;
+    color: var(--medium-gray);
+    font-weight: 600;
+}
+
+.edu-achievements {
+    margin-bottom: var(--spacing-md);
+}
+
+.achievement-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-size: 10pt;
+    color: var(--medium-gray);
+}
+
+.achievement-icon {
+    width: 16px;
+    height: 16px;
+    color: var(--secondary-color);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.coursework {
+    font-size: 9.5pt;
+    color: var(--light-gray);
+    line-height: 1.6;
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+}
+
+.coursework strong {
+    color: var(--medium-gray);
+}
+
+/* ==================== EXPERIENCE ==================== */
+.experience-block {
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px dashed var(--border-color);
+}
+
+.experience-block:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.exp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-md);
+}
+
+.exp-title {
+    font-size: 12pt;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 4px;
+}
+
+.exp-company {
+    font-size: 10pt;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.exp-date {
+    font-size: 9.5pt;
+    color: var(--medium-gray);
+    font-weight: 600;
+}
+
+.exp-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.exp-list li {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 8px;
+    font-size: 10pt;
+    line-height: 1.6;
+    color: var(--medium-gray);
+}
+
+.exp-list li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.exp-list li strong {
+    color: var(--dark);
+    font-weight: 600;
+}
+
+/* ==================== PROJECTS ==================== */
+.project-block {
+    margin-bottom: var(--spacing-2xl);
+    padding: var(--spacing-lg);
+    background: #FAFAFA;
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--secondary-color);
+}
+
+.project-block:last-child {
+    margin-bottom: 0;
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-sm);
+}
+
+.project-title {
+    font-size: 12pt;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 4px;
+}
+
+.project-category {
+    font-size: 9pt;
+    color: var(--secondary-color);
+    font-weight: 600;
+}
+
+.project-year {
+    font-size: 9.5pt;
+    color: var(--medium-gray);
+    font-weight: 600;
+}
+
+.project-description {
+    font-size: 10pt;
+    line-height: 1.7;
+    color: var(--medium-gray);
+    margin-bottom: var(--spacing-md);
+}
+
+.project-description strong {
+    color: var(--dark);
+    font-weight: 600;
+}
+
+.project-list {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: var(--spacing-md);
+}
+
+.project-list li {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 6px;
+    font-size: 9.5pt;
+    line-height: 1.6;
+    color: var(--medium-gray);
+}
+
+.project-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--secondary-color);
+    font-weight: 700;
+    font-size: 14pt;
+    line-height: 1.2;
+}
+
+.project-list li strong {
+    color: var(--dark);
+    font-weight: 600;
+}
+
+.tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.tech {
+    background: white;
+    color: var(--medium-gray);
+    font-size: 8pt;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+}
+
+/* ==================== SKILLS ==================== */
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+}
+
+.skill-category {
+    background: #FAFAFA;
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+}
+
+.skill-category-title {
+    font-family: var(--font-mono);
+    font-size: 9pt;
+    font-weight: 700;
+    color: var(--primary-color);
+    letter-spacing: 0.5px;
+    margin-bottom: var(--spacing-sm);
+    text-transform: uppercase;
+}
+
+.skill-items {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.skill-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 9.5pt;
+}
+
+.skill-name {
+    color: var(--dark);
+    font-weight: 500;
+}
+
+.skill-level {
+    font-size: 8.5pt;
+    color: var(--light-gray);
+    font-weight: 600;
+}
+
+/* ==================== CERTIFICATIONS ==================== */
+.certifications-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+}
+
+.cert-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: #FAFAFA;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+}
+
+.cert-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--primary-color);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.cert-name {
+    font-size: 10pt;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 2px;
+}
+
+.cert-issuer {
+    font-size: 9pt;
+    color: var(--medium-gray);
+}
+
+/* ==================== ACHIEVEMENTS ==================== */
+.achievements-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.achievement-block {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: linear-gradient(135deg, #FFF8E1, #FFFBF0);
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--accent-color);
+}
+
+.achievement-icon-large {
+    font-size: 32pt;
+    line-height: 1;
+}
+
+.achievement-content {
+    flex: 1;
+}
+
+.achievement-title {
+    font-size: 11pt;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 4px;
+}
+
+.achievement-desc {
+    font-size: 9.5pt;
+    color: var(--medium-gray);
+    line-height: 1.5;
+}
+
+/* ==================== FOOTER ==================== */
+.resume-footer {
+    margin-top: var(--spacing-2xl);
+    padding-top: var(--spacing-lg);
+    border-top: 2px solid var(--border-color);
+    text-align: center;
+}
+
+.footer-note {
+    font-size: 9pt;
+    color: var(--medium-gray);
+    margin-bottom: 4px;
+}
+
+.footer-meta {
+    font-size: 8.5pt;
+    color: var(--light-gray);
+}
+
+/* ==================== PRINT STYLES ==================== */
+@media print {
+    /* Hide print button */
+    .no-print {
+        display: none !important;
+    }
+
+    /* Reset page layout */
+    body {
+        background: white;
+        margin: 0;
+        padding: 0;
+    }
+
+    .resume-page {
+        max-width: 100%;
+        margin: 0;
+        padding: 0.5in 0.75in;
+        box-shadow: none;
+        border-radius: 0;
+    }
+
+    /* Force page breaks */
+    .section {
+        page-break-inside: avoid;
+    }
+
+    .project-block,
+    .experience-block {
+        page-break-inside: avoid;
+    }
+
+    /* Optimize colors for print */
+    .summary-content {
+        background: #F8F8F8 !important;
+        border-left-color: var(--dark) !important;
+    }
+
+    .cgpa-badge {
+        background: var(--dark) !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .project-block {
+        background: #FAFAFA !important;
+        border-left-color: var(--dark) !important;
+    }
+
+    .achievement-block {
+        background: #F8F8F8 !important;
+    }
+
+    /* Ensure links are visible */
+    a {
+        color: var(--dark) !important;
+        text-decoration: none !important;
+    }
+
+    /* Optimize spacing */
+    .section {
+        margin-bottom: 20pt;
+    }
+
+    /* Remove animations */
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* ==================== RESPONSIVE (Mobile Preview) ==================== */
+@media screen and (max-width: 768px) {
+    .resume-page {
+        margin: 0;
+        padding: var(--spacing-lg);
+        border-radius: 0;
+    }
+
+    .header {
+        flex-direction: column;
+    }
+
+    .header-right {
+        align-items: flex-start;
+        margin-top: var(--spacing-md);
+    }
+
+    .name {
+        font-size: 32pt;
+    }
+
+    .contact-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .skills-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .print-controls {
+        position: static;
+        padding: var(--spacing-md);
+        text-align: center;
+    }
+
+    .print-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ==================== ACCESSIBILITY ==================== */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .resume-page {
+        border: 2px solid var(--dark);
+    }
+
+    .section-title {
+        border-bottom-width: 3px;
+    }
+}

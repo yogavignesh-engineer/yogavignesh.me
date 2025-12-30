@@ -1,0 +1,185 @@
+# Portfolio Codebase Guide
+
+## Architecture Overview
+
+This is a **performance-optimized React portfolio** with cinematic animations, 3D interactions, and custom cursor mechanics. The stack:
+- **React 18** with `styled-components` for CSS-in-JS
+- **Framer Motion** for all animations (no GSAP)
+- **Three.js via @react-three/fiber** for 3D scenes
+- **Vite** as the build tool
+
+### Core Sections
+1. **Hero** (`src/components/hero/`) - Sticky section with parallax text, floating portrait, loader sequence
+2. **About** (`src/components/about/`) - Dark-themed biographical content with timeline
+3. **Works** (`src/components/works/`) - 3D mechanical pointer menu + horizontal project gallery
+
+## Critical Performance Patterns
+
+### MotionValues Over State for Mouse Tracking
+**Problem:** Using React state for mouse coordinates causes 60+ re-renders/second, tanking FPS.
+
+**Solution:** Use Framer Motion's `useMotionValue` and `useSpring` for render-free updates:
+
+```jsx
+// ✅ CORRECT: Zero re-renders on mouse move
+const mouseX = useMotionValue(0);
+const mouseY = useMotionValue(0);
+const xSpring = useSpring(mouseX, { damping: 25, stiffness: 300 });
+
+// Pass MotionValues directly to style prop
+<motion.div style={{ x: xSpring, y: ySpring }} />
+
+// ❌ WRONG: Causes re-render on every mouse move
+const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+```
+
+**Examples:** `src/hooks/useMouseParallax.js`, `src/components/CustomCursor.jsx`, `src/components/hero/Hero.jsx`
+
+### Hardware Acceleration Hints
+All animated layers use:
+```css
+will-change: transform;
+transform: translateZ(0); /* Force GPU layer */
+```
+
+## Component Communication
+
+### Cursor Context Pattern
+Custom cursor states are managed via `CursorContext.jsx`:
+
+```jsx
+// In any component:
+const { setCursor } = useCursor();
+
+// On hover:
+onMouseEnter={() => setCursor('text', 'EXPLORE')}
+onMouseLeave={() => setCursor('default')}
+```
+
+**Modes:** `default`, `button`, `text`, `crosshair`
+
+### Sound Hooks
+`useSound.js` provides `playClick()` and `playHover()` for UI feedback. Audio files must exist in `/public/sounds/`.
+
+## Animation Sequences
+
+### Loader → Hero Handoff
+`HeroLoader.jsx` controls app initialization with a 3-second sequence:
+1. Cipher text reveal (staggered letters)
+2. Progress bar animation
+3. Exit wipe animation
+4. Calls `onLoaded()` callback **after** exit completes
+
+**Key:** Loader uses `useAnimation()` controller to sequence animations, not standard Framer variants.
+
+### Text Animations
+- **MaskedText:** Slide-up reveal with viewport trigger
+- **CipherReveal:** Matrix-style character decoding effect (uses `useInView`)
+- **VelocityText:** (Assumed) Stagger text with physics spring
+
+### Parallax Implementation
+Pass `xSpring` and `ySpring` MotionValues from parent → child:
+
+```jsx
+// Parent (Hero.jsx)
+const { xSpring, ySpring } = useMouseParallax();
+<HeroContent xSpring={xSpring} ySpring={ySpring} />
+
+// Child (HeroContent.jsx)
+const parallaxX = useTransform(xSpring, [-0.5, 0.5], [-10, 10]);
+<motion.div style={{ x: parallaxX, y: parallaxY }} />
+```
+
+## 3D Scene Architecture
+
+### Works Menu
+- `WorksMenu.jsx`: Canvas wrapper with quadrant layout
+- `MechanicalPointer.jsx`: Three.js object that rotates to face hovered project
+- Uses `@react-three/drei` helpers: `useGLTF`, `Text`, `Center`, `Resize`
+
+**Model Loading:**
+```jsx
+const { scene } = useGLTF('/tool.glb', true);
+useGLTF.preload('/tool.glb'); // At bottom of file
+```
+
+**Rotation Logic:** Calculates angle with `Math.atan2`, applies rotation offset for model calibration.
+
+## Data Management
+
+### Project Schema
+`src/data/projects.js` exports `PROJECTS` array with:
+```javascript
+{
+  id: Number,
+  title: String,
+  cat: String, // Category
+  year: String,
+  img: String, // Menu thumbnail
+  img2: String, // Detail page image
+  challenge: String,
+  solution: String,
+  impact: String,
+  tech: String[] // Tech stack tags
+}
+```
+
+### Resume Data
+`src/data/resume.js` contains timeline events with `year`, `title`, `detail`, `tag` fields.
+
+## Styling Conventions
+
+### Color Palette
+- Light sections: `#F9F9F9` (bg), `#111` (text)
+- Dark sections: `#050505` (bg), `#EAEAEA` (text)
+- Accent: `#66FCF1` (cyan)
+
+### Typography
+- **Headings:** `Oswald` (condensed, uppercase)
+- **Body:** `Inter` (sans-serif)
+- **Code/Tech:** `JetBrains Mono` (monospace)
+
+### Responsive Breakpoints
+- Desktop: Default
+- Tablet: `@media (max-width: 1024px)`
+- Mobile: `@media (max-width: 768px)`
+
+## Global Mechanics
+
+### Custom Cursor
+- **Desktop only** (hides native cursor via `cursor: none`)
+- Follows mouse with spring physics
+- Changes size/color based on hover states
+- Uses `mix-blend-mode: difference` for contrast on any background
+
+### Grain Overlay
+`Grain.jsx` applies static SVG noise pattern with `mix-blend-mode: overlay` at 5% opacity across all pages.
+
+### Scrolling Behavior
+- Hero uses `position: sticky` to create "eclipse" effect as About scrolls over it
+- `scrollbar-gutter: stable` prevents layout shift
+- `overscroll-behavior: none` disables rubber-banding on touch devices
+
+## Adding New Projects
+
+1. Add entry to `PROJECTS` array in `src/data/projects.js`
+2. Place images in `/public/projects/` folder
+3. ID must match menu quadrant position (1-4)
+4. Update `WorksMenu.jsx` quadrant titles if needed (currently uses generic project titles)
+
+## Performance Checklist
+
+When adding animations:
+- [ ] Use `useMotionValue` for high-frequency updates
+- [ ] Add `will-change: transform` to animated elements
+- [ ] Avoid `mix-blend-mode` on animated layers (GPU bottleneck)
+- [ ] Prefer `useTransform` over inline calculations
+- [ ] Use `useMemo` for static animation variants
+- [ ] Set `fetchPriority="high"` on above-fold images
+
+## Common Gotchas
+
+- **Three.js model not visible:** Check `rotation` prop in `<primitive>` - models often need 90° X-axis rotation
+- **Cursor not changing:** Ensure `setCursor('default')` is called in `onMouseLeave`
+- **Parallax not working:** Verify MotionValues are passed down as props, not derived in child
+- **Loader stuck:** Check that `onLoaded` callback is triggered in exit animation's `onComplete`
