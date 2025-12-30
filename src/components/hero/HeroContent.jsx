@@ -440,7 +440,7 @@ const ArcText = React.memo(({ text }) => {
             type: "spring",
             stiffness: 50,
             damping: 18,
-            delay: delay + 0.3 // Reduced from 1.3
+            delay: delay + 0.1 // Fast entrance
           }
         }
       };
@@ -479,13 +479,13 @@ const HeroContent = React.memo(({ xSpring, ySpring }) => {
   const clipWrapperAnim = useMemo(() => ({
     initial: { clipPath: 'inset(100% 0% 0% 0%)' },
     animate: { clipPath: 'inset(0% 0% 0% 0%)' },
-    transition: { duration: 1.0, ease: [0.76, 0, 0.24, 1], delay: 0.7 } // Reduced from 1.7
+    transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1], delay: 0.3 } // Fast entrance
   }), []);
 
   const portraitFrameAnim = useMemo(() => ({
     initial: { y: "20%" },
     animate: { y: "0%" },
-    transition: { type: "spring", stiffness: 40, damping: 20, delay: 0.8 } // Reduced from 1.8
+    transition: { type: "spring", stiffness: 40, damping: 20, delay: 0.4 } // Fast entrance
   }), []);
 
   const listItemVariants = useMemo(() => {

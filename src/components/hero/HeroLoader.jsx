@@ -159,7 +159,7 @@ const HeroLoader = ({ onComplete }) => {
       } else {
         console.error('[LOADER] onComplete is not a function!');
       }
-    }, 800);
+    }, 500);
 
     return () => {
       console.log('[LOADER] HeroLoader unmounting');

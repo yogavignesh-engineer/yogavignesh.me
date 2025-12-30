@@ -72,10 +72,10 @@ const Hero = React.forwardRef((props, ref) => {
   const [mountVisuals, setMountVisuals] = React.useState(false);
 
   React.useEffect(() => {
-    // Delay mounting heavy visuals slightly (300ms) for smoother entrance after text
+    // Delay mounting heavy visuals slightly (50ms) for near-instant appearance
     const timer = setTimeout(() => {
       setMountVisuals(true);
-    }, 300);
+    }, 50);
     return () => clearTimeout(timer);
   }, []);
 
