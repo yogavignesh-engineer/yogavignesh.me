@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { AnimatedCounter } from '../animations/MicroInteractions';
 
-// --- MAIN SECTION ---
 const Section = styled(motion.section)`
   padding: 10rem 4vw;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -17,6 +16,19 @@ const TopLine = styled.p`
   margin-bottom: 8rem;
   text-transform: uppercase;
 `;
+
+const AboutGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4vw;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+`;
+
+const AboutBlock = styled(motion.div)``;
 
 const AboutLabel = styled.h3`
   font-family: 'JetBrains Mono', monospace;
@@ -33,94 +45,80 @@ const AboutText = styled.p`
   font-weight: 300;
 `;
 
-// --- SCROLLYTELLING LAYOUT ---
-const ScrollyContainer = styled.div`
-  display: flex;
-  position: relative;
-  max-width: 1400px;
-  margin: 0 auto 10rem;
-  padding: 0 4vw;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-  }
+const PersonalStory = styled.div`
+  max-width: 1200px;
+  margin: 0 auto 8rem;
+  padding: 4rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-left: 3px solid #66FCF1;
+  border-radius: 4px;
 `;
 
-const StickyLeft = styled.div`
-  width: 45%;
-  height: 80vh;
-  position: sticky;
-  top: 10vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  
-  @media (max-width: 768px) {
-    position: relative;
-    width: 100%;
-    height: 40vh;
-    top: 0;
-    margin-bottom: 2rem;
-  }
-`;
-
-const ScrollRight = styled.div`
-  width: 50%;
-  margin-left: 5%;
-  padding-bottom: 20vh;
-
-  @media (max-width: 768px) {
-    width: 100%;
-    margin-left: 0;
-    padding-bottom: 0;
-  }
-`;
-
-const StoryStep = styled(motion.div)`
-  min-height: 80vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  opacity: 0.3;
-  transition: opacity 0.5s ease;
-  
-  &.active {
-    opacity: 1;
-  }
-`;
-
-const VisualCard = styled(motion.div)`
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  overflow: hidden;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const VisualLabel = styled.h3`
+const StoryTitle = styled.h2`
   font-family: 'Oswald', sans-serif;
-  font-size: 3rem;
-  color: #66FCF1;
-  z-index: 2;
+  font-size: 2rem;
+  color: #EAEAEA;
+  margin-bottom: 2rem;
   text-transform: uppercase;
-  text-align: center;
+  letter-spacing: 1px;
 `;
 
-const VisualIcon = styled(motion.div)`
-  font-size: 8rem;
-  color: #333;
-  position: absolute;
-  z-index: 1;
-  opacity: 0.2;
+const StoryText = styled.p`
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #BBB;
+  margin-bottom: 1.5rem;
+  font-weight: 300;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+  
+  strong {
+    color: #66FCF1;
+    font-weight: 500;
+  }
+  
+  .highlight-orange {
+    color: #FF6B35;
+    font-weight: 500;
+  }
 `;
 
-// --- STATS SECTION ---
+const ResumeStrip = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4vw;
+  margin-top: 8rem;
+  padding-top: 4rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+`;
+
+const ResumeItem = styled.div``;
+
+const StripTitle = styled.h4`
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: #EAEAEA;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+`;
+
+const StripText = styled.p`
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #888;
+  font-weight: 300;
+`;
+
+// Animated Stats Section
 const StatsSection = styled(motion.div)`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -156,6 +154,13 @@ const StatCard = styled(motion.div)`
   &:last-child::after {
     display: none;
   }
+  
+  @media (max-width: 768px) {
+    &:nth-child(2)::after,
+    &:nth-child(4)::after {
+      display: none;
+    }
+  }
 `;
 
 const StatNumber = styled.div`
@@ -178,100 +183,6 @@ const StatLabel = styled.div`
   letter-spacing: 2px;
 `;
 
-// --- RESUME STRIP ---
-const ResumeStrip = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 4vw;
-  margin-top: 8rem;
-  padding-top: 4rem;
-  border-top: 1px solid rgba(255,255,255,0.1);
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: 4rem;
-  }
-`;
-
-const ResumeItem = styled.div``;
-
-const StripTitle = styled.h4`
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.8rem;
-  color: #EAEAEA;
-  margin-bottom: 1rem;
-  text-transform: uppercase;
-`;
-
-const StripText = styled.p`
-  font-family: 'Inter', sans-serif;
-  font-size: 1rem;
-  line-height: 1.5;
-  color: #888;
-  font-weight: 300;
-`;
-
-// --- DATA FOR STEPS ---
-const STORIES = [
-  {
-    id: 'identity',
-    label: 'IDENTITY',
-    icon: '⚡',
-    title: 'ENGINEER × DEVELOPER',
-    text: "I refuse to be defined by a single label. While my degree says 'Mechanical Engineer', my code says 'Full Stack Developer'. I see software as a superpower that amplifies physical engineering."
-  },
-  {
-    id: 'growth',
-    label: 'GROWTH',
-    icon: '📈',
-    title: 'THE SELF-TAUGHT PATH',
-    text: "My journey didn't start in a CS lecture hall. It started with disassembling toy cars and evolved into prototyping with SolidWorks. When I hit the limits of hardware, I taught myself Python, React, and AI."
-  },
-  {
-    id: 'approach',
-    label: 'APPROACH',
-    icon: '🛠️',
-    title: 'BUILD TO LEARN',
-    text: "I don't just study theory; I build products. Hackathons are my testing grounds, and failures are my data points. I obsess over creating measurable impact rather than just writing code."
-  }
-];
-
-// --- SCROLLY SECTION COMPONENT ---
-const ScrollySection = () => {
-  const [activeStep, setActiveStep] = React.useState(0);
-
-  return (
-    <ScrollyContainer>
-      <StickyLeft>
-        <VisualCard
-          key={activeStep}
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <VisualIcon>{STORIES[activeStep].icon}</VisualIcon>
-          <VisualLabel>{STORIES[activeStep].label}</VisualLabel>
-        </VisualCard>
-      </StickyLeft>
-
-      <ScrollRight>
-        {STORIES.map((story, index) => (
-          <StoryStep
-            key={story.id}
-            className={activeStep === index ? 'active' : ''}
-            onViewportEnter={() => setActiveStep(index)}
-            viewport={{ amount: 0.6 }}
-          >
-            <AboutLabel>0{index + 1} // {story.title}</AboutLabel>
-            <AboutText>{story.text}</AboutText>
-          </StoryStep>
-        ))}
-      </ScrollRight>
-    </ScrollyContainer>
-  );
-};
-
-// --- MAIN COMPONENT ---
 export default function BioGrid() {
   return (
     <Section>
@@ -279,7 +190,69 @@ export default function BioGrid() {
         YOGA VIGNESH · MECHANICAL ENGINEER × AI DEVELOPER · MADURAI, INDIA
       </TopLine>
 
-      <ScrollySection />
+      {/* Personal Narrative */}
+      <PersonalStory>
+        <StoryTitle>Who I Am</StoryTitle>
+        <StoryText>
+          I'm a <strong>3rd-year Mechanical Engineering student</strong> at NPR College of Engineering & Technology,
+          Madurai—but I refuse to be limited by traditional boundaries. While most engineers focus solely on
+          CAD and manufacturing, I've taught myself to <strong>build complete digital products</strong> that solve
+          real engineering problems.
+        </StoryText>
+        <StoryText>
+          My latest project, <span className="highlight-orange">PromptToCAD</span>, is an <strong>AI-powered CAD
+            automation platform</strong> where engineers describe parts in plain English and get production-ready
+          3D models in seconds. Built with Python, React, Gemini AI, and CADQuery—it reduces design time by
+          <strong> 90%</strong> and eliminates manual dimensioning errors. This is what excites me: using
+          technology to <strong>democratize engineering</strong>.
+        </StoryText>
+        <StoryText>
+          Growing up in Madurai, I was obsessed with understanding how things work. I'd take apart toy cars,
+          sketch machine parts, and build contraptions from scrap. That curiosity evolved into a passion for
+          <strong> bridging the physical and digital worlds</strong>—combining mechanical design, IoT systems,
+          and full-stack development into unified solutions.
+        </StoryText>
+        <StoryText>
+          I've presented projects at hackathons including <strong>Smart Boundary Detection</strong> (an IoT +
+          Computer Vision cricket system), <strong>Wi-Rover</strong> (an autonomous disaster relief robot), and
+          <strong> Ferrofluids research</strong> (magnetic liquid damping systems). Each taught me that
+          engineering isn't about perfection—it's about <strong>iteration, failure, and learning fast</strong>.
+        </StoryText>
+        <StoryText>
+          My philosophy is simple: <strong>Build products, not just projects</strong>. Whether it's optimizing
+          rubber curing cycles during my industrial internship (saving ₹2.5L annually) or creating this portfolio
+          with 3D animations and custom cursor mechanics—I focus on work that creates <strong>measurable impact</strong>.
+        </StoryText>
+      </PersonalStory>
+
+      <AboutGrid>
+        <AboutBlock>
+          <AboutLabel>+ MY IDENTITY</AboutLabel>
+          <AboutText>
+            A mechanical engineering student who codes. I see software as a superpower,
+            not a separate field. From CAD modeling to React apps, I build
+            end-to-end solutions that bridge physical manufacturing and digital innovation.
+          </AboutText>
+        </AboutBlock>
+
+        <AboutBlock>
+          <AboutLabel>+ MY GROWTH</AboutLabel>
+          <AboutText>
+            Started with sketches and toy disassembly. Now I prototype with SolidWorks,
+            CATIA, and Creo Parametric. I've taught myself Python, React, Three.js, and
+            AI integration—using each project as a learning opportunity.
+          </AboutText>
+        </AboutBlock>
+
+        <AboutBlock>
+          <AboutLabel>+ MY APPROACH</AboutLabel>
+          <AboutText>
+            I believe in building publicly and documenting failures. Hackathons,
+            side-projects, and internships are my testing grounds. Every broken
+            prototype teaches more than a perfect simulation ever could.
+          </AboutText>
+        </AboutBlock>
+      </AboutGrid>
 
       {/* Animated Stats Section */}
       <StatsSection
@@ -345,7 +318,8 @@ export default function BioGrid() {
             <strong>Bhargave Rubber Private Limited</strong> | June 2025<br />
             • Reduced rubber compound defect rate by <strong>15%</strong> through Statistical Process Control<br />
             • Optimized curing cycle times by <strong>8 minutes</strong>, saving <strong>₹2.5L annually</strong><br />
-            • Managed quality audits for <strong>ISO 9001:2015</strong> compliance
+            • Managed quality audits for <strong>ISO 9001:2015</strong> compliance<br />
+            • Operated UTM, Rheometer, and Mooney Viscometer for material testing
           </StripText>
         </ResumeItem>
 
@@ -355,7 +329,8 @@ export default function BioGrid() {
             <strong>AI-Powered CAD Automation Platform</strong> | 2024<br />
             • Built NLP-to-CAD system generating production-ready models from text<br />
             • Achieved <strong>90% reduction</strong> in design time (30 min → 3 min)<br />
-            • Tech: Python, React, Gemini AI, CADQuery, Three.js, Docker
+            • Tech: Python, React, Gemini AI, CADQuery, Three.js, Docker<br />
+            • Currently in pilot discussions with 3 manufacturing companies
           </StripText>
         </ResumeItem>
 
@@ -365,6 +340,7 @@ export default function BioGrid() {
             <strong>Smart Boundary Detection</strong> | IoT + Computer Vision cricket system<br />
             <strong>Wi-Rover</strong> | Autonomous disaster relief robot with SLAM navigation<br />
             <strong>Ferrofluids Research</strong> | Magnetic liquid damping systems study<br />
+            <strong>Sand Filtration</strong> | Rapid-prototyped industrial water filter<br />
             Presented at various college hackathons and technical events
           </StripText>
         </ResumeItem>

@@ -72,20 +72,10 @@ const Hero = React.forwardRef((props, ref) => {
   const [mountVisuals, setMountVisuals] = React.useState(false);
 
   React.useEffect(() => {
-    // PERFORMANCE: Detect if we're in a throttled/headless environment (Lighthouse)
-    // If user prefers reduced motion or we detect headless, skip heavy visuals
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const isHeadless = navigator.userAgent.includes('HeadlessChrome');
-
-    if (prefersReducedMotion || isHeadless) {
-      // Don't mount heavy visuals in Lighthouse/accessibility mode
-      return;
-    }
-
-    // Delay mounting heavy visuals until after LCP is reported (1500ms is typical LCP window)
+    // Delay mounting heavy visuals slightly (300ms) for smoother entrance after text
     const timer = setTimeout(() => {
       setMountVisuals(true);
-    }, 1500);
+    }, 300);
     return () => clearTimeout(timer);
   }, []);
 
