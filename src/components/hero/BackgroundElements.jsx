@@ -106,8 +106,8 @@ const BackgroundElements = React.memo(({ xSpring, ySpring }) => {
         style={{ x: glowX, y: glowY, transform: 'translate(-50%, -50%)' }}
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.5, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        exit={{ opacity: 0, transition: { duration: 0.5, delay: 0.5 } }}
+        transition={{ duration: 1.0, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+        exit={{ opacity: 0, transition: { duration: 0.3, delay: 0.1 } }}
       />
       <BackgroundLayer>
         {/* GEAR 1 - Dramatic entrance from top-left with rotation */}
@@ -130,15 +130,15 @@ const BackgroundElements = React.memo(({ xSpring, ySpring }) => {
             filter: 'blur(0px)'
           }}
           transition={{
-            duration: 2.0,
-            delay: 0.5,
+            duration: 1.2,
+            delay: 0.1,
             ease: [0.16, 1, 0.3, 1],
-            opacity: { duration: 1.5, delay: 0.5 },
-            scale: { duration: 2.0, delay: 0.5, ease: [0.34, 1.56, 0.64, 1] },
-            rotate: { duration: 2.0, delay: 0.5, ease: [0.87, 0, 0.13, 1] },
-            x: { duration: 2.0, delay: 0.5, ease: [0.16, 1, 0.3, 1] },
-            y: { duration: 2.0, delay: 0.5, ease: [0.16, 1, 0.3, 1] },
-            filter: { duration: 1.2, delay: 0.5 }
+            opacity: { duration: 0.8, delay: 0.1 },
+            scale: { duration: 1.2, delay: 0.1, ease: [0.34, 1.56, 0.64, 1] },
+            rotate: { duration: 1.2, delay: 0.1, ease: [0.87, 0, 0.13, 1] },
+            x: { duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] },
+            y: { duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] },
+            filter: { duration: 0.8, delay: 0.1 }
           }}
           exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.5 } }}
         >
@@ -173,23 +173,23 @@ const BackgroundElements = React.memo(({ xSpring, ySpring }) => {
             filter: 'blur(0px)'
           }}
           transition={{
-            duration: 2.2,
-            delay: 0.7,
+            duration: 1.4,
+            delay: 0.2,
             ease: [0.16, 1, 0.3, 1],
-            opacity: { duration: 1.6, delay: 0.7 },
+            opacity: { duration: 1.0, delay: 0.2 },
             scale: {
-              duration: 2.2,
-              delay: 0.7,
+              duration: 1.4,
+              delay: 0.2,
               ease: [0.34, 1.56, 0.64, 1]
             },
             rotate: {
-              duration: 2.2,
-              delay: 0.7,
+              duration: 1.4,
+              delay: 0.2,
               ease: [0.87, 0, 0.13, 1]
             },
-            x: { duration: 2.2, delay: 0.7, ease: [0.16, 1, 0.3, 1] },
-            y: { duration: 2.2, delay: 0.7, ease: [0.16, 1, 0.3, 1] },
-            filter: { duration: 1.4, delay: 0.7 }
+            x: { duration: 1.4, delay: 0.2, ease: [0.16, 1, 0.3, 1] },
+            y: { duration: 1.4, delay: 0.2, ease: [0.16, 1, 0.3, 1] },
+            filter: { duration: 1.0, delay: 0.2 }
           }}
           exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.5, delay: 0.1 } }}
         >
