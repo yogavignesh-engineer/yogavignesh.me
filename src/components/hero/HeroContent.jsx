@@ -412,10 +412,13 @@ const ResumeButton = styled(motion.a)`
 `;
 
 // PERFORMANCE: Memoize the ArcText component to prevent re-renders.
-const ArcText = React.memo(({ text }) => {
+const ArcText = React.memo(({ text, animationReady = true }) => {
   const letters = useMemo(() => Array.from(text), [text]);
   const centerIndex = useMemo(() => letters.length / 2, [letters.length]);
   const prefersReducedMotion = useReducedMotion();
+
+  // Only animate when animationReady is true
+  const shouldAnimate = animationReady && !prefersReducedMotion;
 
   // PERFORMANCE: Pre-calculate all variants to avoid function calls in render.
   const letterVariantsArray = useMemo(() => {
@@ -423,10 +426,11 @@ const ArcText = React.memo(({ text }) => {
       const dist = Math.abs(index - centerIndex);
       const delay = dist * 0.035;
 
-      if (prefersReducedMotion) {
+      if (!shouldAnimate) {
+        // Keep initial state until ready
         return {
-          initial: { y: "0%", rotateX: 0, opacity: 1 },
-          animate: { y: "0%", rotateX: 0, opacity: 1 }
+          initial: { y: "-100%", rotateX: -90, opacity: 0 },
+          animate: { y: "-100%", rotateX: -90, opacity: 0 }
         };
       }
 
@@ -445,7 +449,7 @@ const ArcText = React.memo(({ text }) => {
         }
       };
     });
-  }, [letters.length, centerIndex, prefersReducedMotion]);
+  }, [letters.length, centerIndex, shouldAnimate]);
 
   // PERFORMANCE: Memoize hover variant.
   const letterHoverVariant = useMemo(() => ({ y: -8 }), []);
@@ -469,8 +473,11 @@ const ArcText = React.memo(({ text }) => {
 });
 ArcText.displayName = 'ArcText';
 
-const HeroContent = React.memo(({ xSpring, ySpring }) => {
+const HeroContent = React.memo(({ xSpring, ySpring, animationReady = true }) => {
   const prefersReducedMotion = useReducedMotion();
+
+  // Use animationReady to control when animations should play
+  const shouldAnimate = animationReady && !prefersReducedMotion;
 
   const parallaxX = useTransform(xSpring, [-0.5, 0.5], [-5, 5]);
   const parallaxY = useTransform(ySpring, [-0.5, 0.5], [-5, 5]);
@@ -478,15 +485,15 @@ const HeroContent = React.memo(({ xSpring, ySpring }) => {
   // PERFORMANCE: Memoize motion props to prevent recreating on each render.
   const clipWrapperAnim = useMemo(() => ({
     initial: { clipPath: 'inset(100% 0% 0% 0%)' },
-    animate: { clipPath: 'inset(0% 0% 0% 0%)' },
-    transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1], delay: 0.3 } // Fast entrance
-  }), []);
+    animate: shouldAnimate ? { clipPath: 'inset(0% 0% 0% 0%)' } : { clipPath: 'inset(100% 0% 0% 0%)' },
+    transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1], delay: 0.1 }
+  }), [shouldAnimate]);
 
   const portraitFrameAnim = useMemo(() => ({
     initial: { y: "20%" },
-    animate: { y: "0%" },
-    transition: { type: "spring", stiffness: 40, damping: 20, delay: 0.4 } // Fast entrance
-  }), []);
+    animate: shouldAnimate ? { y: "0%" } : { y: "20%" },
+    transition: { type: "spring", stiffness: 40, damping: 20, delay: 0.2 }
+  }), [shouldAnimate]);
 
   const listItemVariants = useMemo(() => {
     if (prefersReducedMotion) {
@@ -541,7 +548,7 @@ const HeroContent = React.memo(({ xSpring, ySpring }) => {
 
   return (
     <Wrapper>
-      <ArcText text="MECHANICAL ENGINEER" />
+      <ArcText text="MECHANICAL ENGINEER" animationReady={shouldAnimate} />
 
       <CenterStage>
         <PortraitClipWrapper {...clipWrapperAnim}>

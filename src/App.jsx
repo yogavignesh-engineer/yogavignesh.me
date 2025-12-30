@@ -15,6 +15,7 @@ import HeroLoader from './components/hero/HeroLoader';
 import KonamiCode from './KonamiCode';
 import AvailabilityBadge from './components/ui/AvailabilityBadge';
 import PerformanceMonitor from './components/ui/PerformanceMonitor';
+import { AnimationProvider, useAnimationReady } from './context/AnimationContext';
 import { ScrollProgress } from './components/animations/MicroInteractions';
 import { PageTransition } from './components/animations/PageTransition';
 
@@ -66,10 +67,11 @@ const MainContainer = styled.main`
 `;
 
 
-function App() {
+function AppContent() {
   const [loading, setLoading] = useState(true);
   const lenisRef = useRef(null);
   const location = useLocation();
+  const { setAnimationReady } = useAnimationReady();
 
   // Analytics tracking
   usePageTracking(location);
@@ -133,6 +135,12 @@ function App() {
     window.location.href = `/#${section.toLowerCase().replace(' ', '-')}`;
   };
 
+  const handleLoaderComplete = () => {
+    setLoading(false);
+    // Signal all hero animations to start now
+    setAnimationReady(true);
+  };
+
   return (
     <CursorProvider>
       <GlobalStyles />
@@ -145,7 +153,7 @@ function App() {
       <SkipToContent href="#main-content">Skip to main content</SkipToContent>
 
       <AnimatePresence mode="wait">
-        {loading && <HeroLoader key="loader" onComplete={() => setLoading(false)} />}
+        {loading && <HeroLoader key="loader" onComplete={handleLoaderComplete} />}
       </AnimatePresence>
 
       <HeroNavbar onNavClick={handleNavClick} style={{ opacity: loading ? 0 : 1, transition: 'opacity 0.5s' }} />
@@ -180,6 +188,14 @@ function App() {
       {/* Performance Monitor - Toggle with Ctrl+Shift+P */}
       <PerformanceMonitor enabled={true} />
     </CursorProvider>
+  );
+}
+
+function App() {
+  return (
+    <AnimationProvider>
+      <AppContent />
+    </AnimationProvider>
   );
 }
 

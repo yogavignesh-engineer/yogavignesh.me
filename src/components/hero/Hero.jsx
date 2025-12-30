@@ -2,6 +2,7 @@ import React, { memo } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useMouseParallax } from '../../hooks/useMouseParallax';
+import { useAnimationReady } from '../../context/AnimationContext';
 
 // Lazy load heavy visual effects to prioritize LCP (Text)
 const EmberParticles = React.lazy(() => import('./EmberParticles'));
@@ -69,15 +70,7 @@ const Spacer = styled.div`
 
 const Hero = React.forwardRef((props, ref) => {
   const { xSpring, ySpring } = useMouseParallax();
-  const [mountVisuals, setMountVisuals] = React.useState(false);
-
-  React.useEffect(() => {
-    // Delay mounting heavy visuals slightly (50ms) for near-instant appearance
-    const timer = setTimeout(() => {
-      setMountVisuals(true);
-    }, 50);
-    return () => clearTimeout(timer);
-  }, []);
+  const { animationReady } = useAnimationReady();
 
   return (
     <>
@@ -87,14 +80,13 @@ const Hero = React.forwardRef((props, ref) => {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        <HeroContent xSpring={xSpring} ySpring={ySpring} />
+        <HeroContent xSpring={xSpring} ySpring={ySpring} animationReady={animationReady} />
 
-        {mountVisuals && (
-          <React.Suspense fallback={null}>
-            <EmberParticles />
-            <BackgroundElements xSpring={xSpring} ySpring={ySpring} />
-          </React.Suspense>
-        )}
+        {/* Mount visuals immediately - they will animate when animationReady is true */}
+        <React.Suspense fallback={null}>
+          <EmberParticles />
+          <BackgroundElements xSpring={xSpring} ySpring={ySpring} animationReady={animationReady} />
+        </React.Suspense>
       </FixedContainer>
 
       <Spacer ref={ref} />
