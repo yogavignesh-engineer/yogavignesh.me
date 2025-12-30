@@ -369,7 +369,7 @@ export default function ResumePage() {
                     <ResumeHeader>
                         <HeaderLeft>
                             <Name>S. Yoga Vignesh</Name>
-                            <Title>Mechanical Engineer | CAD Specialist | Full Stack Developer</Title>
+                            <Title>Aspiring Design Engineer | CAD Specialist | Product Development</Title>
                         </HeaderLeft>
                         <ContactInfo>
                             <div>+91 7448374793</div>
@@ -382,11 +382,10 @@ export default function ResumePage() {
                     <MainContent>
                         {/* ========== LEFT COLUMN ========== */}
                         <LeftCol>
-                            {/* CAREER OBJECTIVE */}
                             <Section>
                                 <SectionTitle>Career Objective</SectionTitle>
                                 <Para>
-                                    Results-driven <strong>Mechanical Engineering</strong> student seeking a <strong>Design Engineer</strong> role where I can leverage my expertise in CAD modeling (CATIA, SolidWorks, AutoCAD), manufacturing processes, and software development to drive product innovation. Committed to bridging traditional engineering with modern technology solutions.
+                                    Passionate <strong>Mechanical Engineering</strong> student seeking a <strong>Design Engineer</strong> role to apply my expertise in <strong>CAD modeling, 3D design, and product development</strong>. Skilled in CATIA, SolidWorks, AutoCAD, and Creo with hands-on experience in creating production-ready designs. Eager to contribute to innovative product design, prototype development, and design optimization while leveraging modern CAD automation tools.
                                 </Para>
                             </Section>
 
@@ -514,6 +513,16 @@ export default function ResumePage() {
                                 <EduDegree>B.E. Mechanical Engineering</EduDegree>
                                 <EduSchool>NPR College of Engineering & Technology</EduSchool>
                                 <EduSchool>Autonomous | 3rd Year (2022-2026)</EduSchool>
+                                <EduSchool style={{ color: '#FF6B35', fontWeight: '600', marginTop: '0.2rem' }}>Expected CGPA: 7.1</EduSchool>
+                            </Section>
+
+                            {/* LANGUAGES */}
+                            <Section>
+                                <SectionTitleAlt>Languages</SectionTitleAlt>
+                                <Para style={{ fontSize: '0.7rem' }}>
+                                    <strong>English</strong> - Professional Working Proficiency<br />
+                                    <strong>Tamil</strong> - Native / Fluent
+                                </Para>
                             </Section>
 
                             {/* TECHNICAL SKILLS */}
@@ -614,9 +623,9 @@ export default function ResumePage() {
 
                             {/* CAREER INTERESTS */}
                             <Section>
-                                <SectionTitleAlt>Career Interests</SectionTitleAlt>
+                                <SectionTitleAlt>Target Roles</SectionTitleAlt>
                                 <Para style={{ fontSize: '0.65rem' }}>
-                                    Design Engineer • Manufacturing • Quality Engineering • Core Mechanical Roles • Higher Studies
+                                    <strong>Design Engineer</strong> • Product Development • CAD/CAE Engineer • R&D • Manufacturing • Quality Engineering
                                 </Para>
                             </Section>
 
