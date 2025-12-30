@@ -168,7 +168,7 @@ function AppContent() {
               <Route path="/" element={<HomePage />} />
               <Route path="/project/:id" element={<ProjectDetailPage />} />
               <Route path="/blog/:id" element={<BlogPostPage />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
         </MainContainer>

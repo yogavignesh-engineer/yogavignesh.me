@@ -354,7 +354,7 @@ const CardItem = React.memo(({ project, index, className }) => {
   });
 
   const handleClick = () => {
-    navigate(`/work/${project.id}`);
+    navigate(`/project/${project.id}`);
   };
 
   const handleMouseMove = (e) => {
