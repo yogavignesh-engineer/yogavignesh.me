@@ -26,6 +26,7 @@ import NotFound from './pages/NotFound';
 // Lazy load heavy components
 const ProjectDetailPage = React.lazy(() => import('./pages/ProjectDetailPage'));
 const BlogPostPage = React.lazy(() => import('./pages/BlogPostPage'));
+const ResumePage = React.lazy(() => import('./pages/ResumePage'));
 
 // Simple loading fallback for lazy-loaded routes
 const RouteLoader = styled.div`
@@ -168,6 +169,7 @@ function AppContent() {
               <Route path="/" element={<HomePage />} />
               <Route path="/project/:id" element={<ProjectDetailPage />} />
               <Route path="/blog/:id" element={<BlogPostPage />} />
+              <Route path="/resume" element={<ResumePage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
