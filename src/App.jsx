@@ -69,9 +69,11 @@ const MainContainer = styled.main`
 
 
 function AppContent() {
-  const [loading, setLoading] = useState(true);
-  const lenisRef = useRef(null);
   const location = useLocation();
+  // Only show loader on homepage
+  const isHomePage = location.pathname === '/';
+  const [loading, setLoading] = useState(isHomePage);
+  const lenisRef = useRef(null);
   const { setAnimationReady } = useAnimationReady();
 
   // Analytics tracking
@@ -154,7 +156,7 @@ function AppContent() {
       <SkipToContent href="#main-content">Skip to main content</SkipToContent>
 
       <AnimatePresence mode="wait">
-        {loading && <HeroLoader key="loader" onComplete={handleLoaderComplete} />}
+        {loading && isHomePage && <HeroLoader key="loader" onComplete={handleLoaderComplete} />}
       </AnimatePresence>
 
       <HeroNavbar onNavClick={handleNavClick} style={{ opacity: loading ? 0 : 1, transition: 'opacity 0.5s' }} />
