@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { motion, useTransform } from 'framer-motion';
+import { useIsMobile } from '../../hooks/useIsMobile';
 
 // --- ASSETS ---
 // PERFORMANCE: Memoized SVG component to prevent re-creation.
@@ -45,13 +46,12 @@ const GearWrapper = styled(motion.div)`
   &::before {
     content: '';
     position: absolute;
-    inset: -20px; /* Extends beyond parent */
+    inset: -20px;
     background: radial-gradient(circle, rgba(17,17,17,0.3) 0%, transparent 70%);
     z-index: -1;
     pointer-events: none;
-    /* GPU-accelerated blur alternative */
     filter: blur(40px);
-    transform: translateZ(0); /* Force GPU layer */
+    transform: translateZ(0);
   }
   
   @media (max-width: 768px) { width: 60vw; height: 60vw; }
@@ -64,7 +64,35 @@ const SpinningInner = styled(motion.div)`
   backface-visibility: hidden;
 `;
 
+// --- MOBILE: Simple static gear (no animation) ---
+const MobileStaticGear = styled.div`
+  position: absolute;
+  width: 50vw; height: 50vw;
+  opacity: 0.08;
+  color: #222;
+  
+  &.gear1 { top: -10vw; left: -10vw; }
+  &.gear2 { bottom: -12vw; right: -8vw; width: 55vw; height: 55vw; }
+`;
+
 const BackgroundElements = React.memo(({ xSpring, ySpring }) => {
+  const isMobile = useIsMobile();
+
+  // MOBILE: Render simplified static version (no animations, no parallax)
+  if (isMobile) {
+    return (
+      <BackgroundLayer>
+        <MobileStaticGear className="gear1">
+          <GearIcon />
+        </MobileStaticGear>
+        <MobileStaticGear className="gear2">
+          <GearIcon />
+        </MobileStaticGear>
+      </BackgroundLayer>
+    );
+  }
+
+  // DESKTOP: Full animated version with parallax
   const gear1X = useTransform(xSpring, [-0.5, 0.5], [-30, 30]);
   const gear1Y = useTransform(ySpring, [-0.5, 0.5], [-30, 30]);
   const gear2X = useTransform(xSpring, [-0.5, 0.5], [30, -30]);
@@ -103,7 +131,7 @@ const BackgroundElements = React.memo(({ xSpring, ySpring }) => {
           }}
           transition={{
             duration: 2.0,
-            delay: 0.5, // 0.5s sync
+            delay: 0.5,
             ease: [0.16, 1, 0.3, 1],
             opacity: { duration: 1.5, delay: 0.5 },
             scale: { duration: 2.0, delay: 0.5, ease: [0.34, 1.56, 0.64, 1] },
@@ -146,13 +174,13 @@ const BackgroundElements = React.memo(({ xSpring, ySpring }) => {
           }}
           transition={{
             duration: 2.2,
-            delay: 0.7, // 0.2 + 0.5
+            delay: 0.7,
             ease: [0.16, 1, 0.3, 1],
             opacity: { duration: 1.6, delay: 0.7 },
             scale: {
               duration: 2.2,
               delay: 0.7,
-              ease: [0.34, 1.56, 0.64, 1] // Elastic bounce
+              ease: [0.34, 1.56, 0.64, 1]
             },
             rotate: {
               duration: 2.2,
