@@ -1,7 +1,8 @@
-import React, { useMemo } from 'react';
+import React, { useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import CipherReveal from '../animations/CipherReveal';
+import ArcFallingText from '../animations/ArcFallingText';
 
 // --- ANIMATIONS ---
 const glitchAnim = keyframes`
@@ -13,7 +14,8 @@ const glitchAnim = keyframes`
   100% { clip-path: inset(30% 0 50% 0); transform: translate(1px, -1px); }
 `;
 
-// --- STYLED COMPONENTS ---
+// ===== SCROLL RISE SECTION CONTAINER =====
+// This is the section that "rises" over the Hero
 const Section = styled.section`
   min-height: 100vh;
   display: flex;
@@ -25,11 +27,12 @@ const Section = styled.section`
   z-index: 2;
 `;
 
-const SmallTag = styled.div`
+// Small tag: "( ABOUT ME. )"
+const SmallTag = styled(motion.div)`
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.75rem;
   color: #666;
-  margin-bottom: 4vh;
+  margin-bottom: 2vh;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   display: flex;
@@ -40,12 +43,19 @@ const SmallTag = styled.div`
     content: '';
     width: 6px;
     height: 6px;
-    background-color: #333; /* Dark dot indicator */
+    background-color: #333;
     border-radius: 50%;
   }
 `;
 
-const TitleContainer = styled.div`
+// Large ARC TEXT container
+const ArcTextWrapper = styled(motion.div)`
+  margin-bottom: 4vh;
+  overflow: hidden;
+`;
+
+// Subtitle container (blur-to-focus)
+const TitleContainer = styled(motion.div)`
   position: relative;
   display: inline-block;
 `;
@@ -57,22 +67,32 @@ const BlurredDuplicate = styled(motion.div)`
   opacity: 1;
   pointer-events: none;
   transform: translateZ(0);
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5vw;
+  font-weight: 400;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 0.1em;
+  line-height: 1.1;
+  color: #888;
+  
+  @media (max-width: 768px) { font-size: 3.5vw; }
 `;
 
-const MainTitle = styled(motion.h1)`
+const SubTitle = styled(motion.div)`
   font-family: 'Inter', sans-serif;
-  font-size: 4.5vw;
-  font-weight: 400; /* Regular weight for that "Swiss" look */
+  font-size: 1.5vw;
+  font-weight: 400;
   text-transform: uppercase;
-  margin-bottom: 8vh;
+  margin-bottom: 6vh;
   text-align: center;
-  letter-spacing: -0.03em;
+  letter-spacing: 0.1em;
   line-height: 1.1;
-  color: #EAEAEA;
+  color: #888;
   max-width: 90vw;
   transform: translateZ(0);
-  
-  @media (max-width: 768px) { font-size: 9vw; }
+
+  @media (max-width: 768px) { font-size: 3.5vw; }
 `;
 
 const ImageWrapper = styled(motion.div)`
@@ -81,7 +101,8 @@ const ImageWrapper = styled(motion.div)`
   height: 380px;
   margin-bottom: 2rem;
   cursor: pointer;
-  
+  overflow: hidden;
+
   &:hover {
     .glitch-layer {
       opacity: 0.5;
@@ -99,8 +120,7 @@ const ImageWrapper = styled(motion.div)`
   }
 `;
 
-// PERFORMANCE: Replaced inline style with a styled component
-const ImageContainer = styled.div`
+const ImageContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -115,7 +135,6 @@ const Portrait = styled.img`
   border-radius: 2px;
 `;
 
-// PERFORMANCE: Use .webp
 const GLITCH_IMAGE_URL = '/about-image-3.webp';
 
 const GlitchLayer = styled.div`
@@ -130,7 +149,7 @@ const GlitchLayer = styled.div`
   z-index: 2;
 `;
 
-const Caption = styled.div`
+const Caption = styled(motion.div)`
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.8rem;
   color: #555;
@@ -139,51 +158,92 @@ const Caption = styled.div`
   letter-spacing: -0.02em;
 `;
 
-// --- MOTION PROPS ---
-const blurredDuplicateAnim = {
-  initial: { opacity: 1 },
-  animate: { opacity: 0 },
-  transition: { duration: 0.5 },
-};
-
-const mainTitleAnim = {
-  initial: { opacity: 0, y: 40 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 1.0, ease: [0.16, 1, 0.3, 1], delay: 0.3 },
-};
-
-const imageWrapperAnim = {
-  initial: { clipPath: "inset(50% 0 50% 0)", scale: 0.9 },
-  whileInView: { clipPath: "inset(0% 0 0% 0)", scale: 1 },
-  transition: { duration: 1.2, ease: "circOut", delay: 0.2 },
-};
-
 // --- COMPONENT ---
 const AboutHero = React.memo(() => {
+  const sectionRef = useRef(null);
+  const imageRef = useRef(null);
+
+  // ===== IMAGE REVEAL ANIMATION =====
+  // Track scroll for image reveal (vertical clip-path)
+  const { scrollYProgress: imageProgress } = useScroll({
+    target: imageRef,
+    offset: ["start 0.9", "start 0.4"]
+  });
+
+  // Image reveals from bottom to top with clip-path
+  const imageClipPath = useTransform(
+    imageProgress,
+    [0, 1],
+    ["inset(100% 0 0 0)", "inset(0% 0 0 0)"]
+  );
+
   return (
-    <Section>
-      <SmallTag>
+    <Section ref={sectionRef}>
+      {/* Small tag with CipherReveal */}
+      <SmallTag
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+        viewport={{ once: true }}
+      >
         <CipherReveal text="( ABOUT ME. )" delay={0.2} />
       </SmallTag>
-      
-      <TitleContainer>
-        <BlurredDuplicate {...blurredDuplicateAnim}>
+
+      {/* LARGE ARC FALLING TEXT - "ABOUT ME" */}
+      <ArcTextWrapper
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+        viewport={{ once: true }}
+      >
+        <ArcFallingText
+          text="ABOUT ME"
+          fontSize="clamp(5rem, 18vw, 14rem)"
+          color="#EAEAEA"
+        />
+      </ArcTextWrapper>
+
+      {/* Subtitle with blur-to-focus effect */}
+      <TitleContainer
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.3 }}
+        viewport={{ once: true }}
+      >
+        <BlurredDuplicate
+          initial={{ opacity: 1, filter: "blur(10px)" }}
+          whileInView={{ opacity: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          viewport={{ once: true }}
+        >
           MECHANICAL ENGINEER & FULL STACK DEVELOPER
         </BlurredDuplicate>
-        
-        <MainTitle {...mainTitleAnim}>
+
+        <SubTitle>
           MECHANICAL ENGINEER & FULL STACK DEVELOPER
-        </MainTitle>
+        </SubTitle>
       </TitleContainer>
 
-      <ImageContainer>
-        <ImageWrapper {...imageWrapperAnim}>
+      {/* Image with vertical clip-path reveal */}
+      <ImageContainer ref={imageRef}>
+        <ImageWrapper
+          style={{ clipPath: imageClipPath }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+          viewport={{ once: true }}
+        >
           <Portrait src={GLITCH_IMAGE_URL} alt="Profile" />
           <GlitchLayer className="glitch-layer" />
         </ImageWrapper>
 
-        <Caption>
-           <CipherReveal text="S. YOGA VIGNESH, MECHANICAL ENGINEER" delay={0.8} />
+        <Caption
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          viewport={{ once: true }}
+        >
+          <CipherReveal text="S. YOGA VIGNESH, MECHANICAL ENGINEER" delay={0.8} />
         </Caption>
       </ImageContainer>
     </Section>

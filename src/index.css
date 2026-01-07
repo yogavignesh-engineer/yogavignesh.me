@@ -2,6 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ===== SMOOTH SCROLL ===== */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ===== REDUCED MOTION SUPPORT ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ===== SELECTION STYLES ===== */
+::selection {
+  background: #FF6B35;
+  color: #fff;
+}
+
 /* ... keep your other global styles below this ... *//* src/index.css */
 
 /* The Noise Overlay */
@@ -27,4 +48,10 @@ body::after {
 /* Hide default cursor so we can use our custom one */
 body, a, button {
   cursor: none !important;
+}
+
+/* ===== FOCUS VISIBLE STYLES ===== */
+:focus-visible {
+  outline: 2px solid #FF6B35;
+  outline-offset: 3px;
 }

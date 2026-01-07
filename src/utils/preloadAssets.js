@@ -11,9 +11,8 @@ export const preload3DModels = () => {
   const modelPath = '/models/dodge-challenger/scene.gltf';
   try {
     useGLTF.preload(modelPath);
-    console.log('✅ Preloaded 3D model:', modelPath);
   } catch (error) {
-    console.warn('⚠️ Could not preload model:', modelPath);
+    // Silent fail for missing model
   }
 };
 
@@ -21,7 +20,7 @@ export const preload3DModels = () => {
 export const createProgressiveImage = (src, placeholder) => {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    
+
     // Load low-quality placeholder first
     if (placeholder) {
       const placeholderImg = new Image();
@@ -30,7 +29,7 @@ export const createProgressiveImage = (src, placeholder) => {
         resolve({ src: placeholder, isPlaceholder: true });
       };
     }
-    
+
     // Then load full quality
     img.src = src;
     img.onload = () => resolve({ src, isPlaceholder: false });
@@ -41,7 +40,7 @@ export const createProgressiveImage = (src, placeholder) => {
 // Preload critical project images
 export const preloadProjectImages = (projects) => {
   const criticalImages = projects.slice(0, 4).map(p => p.img);
-  
+
   criticalImages.forEach(src => {
     if (src) {
       const link = document.createElement('link');
@@ -52,14 +51,14 @@ export const preloadProjectImages = (projects) => {
       document.head.appendChild(link);
     }
   });
-  
-  console.log(`✅ Preloaded ${criticalImages.length} project images`);
+
+  // Preload complete
 };
 
 // Lazy load images with IntersectionObserver
 export const useLazyImage = (ref, src) => {
   if (typeof window === 'undefined') return;
-  
+
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach(entry => {
@@ -71,11 +70,11 @@ export const useLazyImage = (ref, src) => {
     },
     { rootMargin: '50px' }
   );
-  
+
   if (ref.current) {
     observer.observe(ref.current);
   }
-  
+
   return () => observer.disconnect();
 };
 

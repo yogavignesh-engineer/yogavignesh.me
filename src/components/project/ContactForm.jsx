@@ -142,37 +142,37 @@ const ContactForm = () => {
     subject: '',
     message: ''
   });
-  
+
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  
+
   const validate = () => {
     const newErrors = {};
-    
+
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required';
     }
-    
+
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Invalid email format';
     }
-    
+
     if (!formData.subject.trim()) {
       newErrors.subject = 'Subject is required';
     }
-    
+
     if (!formData.message.trim()) {
       newErrors.message = 'Message is required';
     } else if (formData.message.trim().length < 10) {
       newErrors.message = 'Message must be at least 10 characters';
     }
-    
+
     return newErrors;
   };
-  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -181,18 +181,18 @@ const ContactForm = () => {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const newErrors = validate();
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-    
+
     setIsSubmitting(true);
-    
+
     try {
       // Web3Forms - Get your access key at https://web3forms.com
       const response = await fetch('https://api.web3forms.com/submit', {
@@ -208,12 +208,11 @@ const ContactForm = () => {
           message: formData.message
         })
       });
-      
+
       if (response.ok) {
-        console.log('Form submitted successfully:', formData);
         setIsSuccess(true);
         setFormData({ name: '', email: '', subject: '', message: '' });
-        
+
         // Reset success message after 5 seconds
         setTimeout(() => setIsSuccess(false), 5000);
       } else {
@@ -226,7 +225,7 @@ const ContactForm = () => {
       setIsSubmitting(false);
     }
   };
-  
+
   return (
     <FormContainer
       initial={{ opacity: 0, y: 30 }}
@@ -236,7 +235,7 @@ const ContactForm = () => {
       onSubmit={handleSubmit}
     >
       <FormTitle>Get In Touch</FormTitle>
-      
+
       <FormGroup>
         <Label htmlFor="name">Name</Label>
         <Input
@@ -251,7 +250,7 @@ const ContactForm = () => {
         />
         {errors.name && <ErrorMessage>{errors.name}</ErrorMessage>}
       </FormGroup>
-      
+
       <FormGroup>
         <Label htmlFor="email">Email</Label>
         <Input
@@ -266,7 +265,7 @@ const ContactForm = () => {
         />
         {errors.email && <ErrorMessage>{errors.email}</ErrorMessage>}
       </FormGroup>
-      
+
       <FormGroup>
         <Label htmlFor="subject">Subject</Label>
         <Input
@@ -281,7 +280,7 @@ const ContactForm = () => {
         />
         {errors.subject && <ErrorMessage>{errors.subject}</ErrorMessage>}
       </FormGroup>
-      
+
       <FormGroup>
         <Label htmlFor="message">Message</Label>
         <TextArea
@@ -295,7 +294,7 @@ const ContactForm = () => {
         />
         {errors.message && <ErrorMessage>{errors.message}</ErrorMessage>}
       </FormGroup>
-      
+
       <SubmitButton
         type="submit"
         disabled={isSubmitting}
@@ -304,7 +303,7 @@ const ContactForm = () => {
       >
         {isSubmitting ? 'SENDING...' : 'SEND MESSAGE'}
       </SubmitButton>
-      
+
       {isSuccess && (
         <SuccessMessage
           initial={{ opacity: 0, scale: 0.9 }}

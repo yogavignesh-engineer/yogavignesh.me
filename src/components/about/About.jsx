@@ -4,7 +4,6 @@ import AboutHero from './AboutHero';
 import BioGrid from './BioGrid';
 import RhythmSection from './RhythmSection';
 import TimelineParallax from './TimelineParallax';
-import BigFooter from './BigFooter';
 import LabNotes from './LabNotes';
 
 const PageContainer = styled.div`
@@ -32,7 +31,6 @@ const About = React.memo(React.forwardRef((props, ref) => {
       <RhythmSection />
       <LabNotes />
       <TimelineParallax />
-      <BigFooter />
     </PageContainer>
   );
 }));

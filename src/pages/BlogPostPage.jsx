@@ -291,8 +291,8 @@ function BlogPostPage() {
   return (
     <PageContainer>
       <ArticleContainer>
-        <BackButton onClick={() => navigate('/')} whileHover={{ scale: 1.05 }}>
-          ← Back to Portfolio
+        <BackButton onClick={() => window.location.href = '/#blog'} whileHover={{ scale: 1.05 }}>
+          ← Back to Case Studies
         </BackButton>
 
         <ArticleHeader>

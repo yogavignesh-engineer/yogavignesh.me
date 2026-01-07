@@ -75,8 +75,17 @@ const MobileStaticGear = styled.div`
   &.gear2 { bottom: -12vw; right: -8vw; width: 55vw; height: 55vw; }
 `;
 
-const BackgroundElements = React.memo(({ xSpring, ySpring }) => {
+const BackgroundElements = React.memo(({ xSpring, ySpring, animationReady = true }) => {
   const isMobile = useIsMobile();
+
+  // CRITICAL: All hooks must be called before any conditional return
+  // to satisfy React's Rules of Hooks
+  const gear1X = useTransform(xSpring, [-0.5, 0.5], [-30, 30]);
+  const gear1Y = useTransform(ySpring, [-0.5, 0.5], [-30, 30]);
+  const gear2X = useTransform(xSpring, [-0.5, 0.5], [30, -30]);
+  const gear2Y = useTransform(ySpring, [-0.5, 0.5], [30, -30]);
+  const glowX = useTransform(xSpring, [-0.5, 0.5], [-100, 100]);
+  const glowY = useTransform(ySpring, [-0.5, 0.5], [-100, 100]);
 
   // MOBILE: Render simplified static version (no animations, no parallax)
   if (isMobile) {
@@ -93,20 +102,15 @@ const BackgroundElements = React.memo(({ xSpring, ySpring }) => {
   }
 
   // DESKTOP: Full animated version with parallax
-  const gear1X = useTransform(xSpring, [-0.5, 0.5], [-30, 30]);
-  const gear1Y = useTransform(ySpring, [-0.5, 0.5], [-30, 30]);
-  const gear2X = useTransform(xSpring, [-0.5, 0.5], [30, -30]);
-  const gear2Y = useTransform(ySpring, [-0.5, 0.5], [30, -30]);
-  const glowX = useTransform(xSpring, [-0.5, 0.5], [-100, 100]);
-  const glowY = useTransform(ySpring, [-0.5, 0.5], [-100, 100]);
+  // Animations only start when animationReady is true (after loader completes)
 
   return (
     <>
       <GlowLayer
         style={{ x: glowX, y: glowY, transform: 'translate(-50%, -50%)' }}
         initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.0, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+        animate={animationReady ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }}
+        transition={{ duration: 1.0, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
         exit={{ opacity: 0, transition: { duration: 0.3, delay: 0.1 } }}
       />
       <BackgroundLayer>
@@ -121,30 +125,37 @@ const BackgroundElements = React.memo(({ xSpring, ySpring }) => {
             y: -400,
             filter: 'blur(20px)'
           }}
-          animate={{
+          animate={animationReady ? {
             opacity: 0.15,
             scale: 1,
             rotate: 0,
             x: 0,
             y: 0,
             filter: 'blur(0px)'
+          } : {
+            opacity: 0,
+            scale: 0.3,
+            rotate: -180,
+            x: -400,
+            y: -400,
+            filter: 'blur(20px)'
           }}
           transition={{
-            duration: 1.2,
-            delay: 0.1,
+            duration: 1.4,
+            delay: 0.2,
             ease: [0.16, 1, 0.3, 1],
-            opacity: { duration: 0.8, delay: 0.1 },
-            scale: { duration: 1.2, delay: 0.1, ease: [0.34, 1.56, 0.64, 1] },
-            rotate: { duration: 1.2, delay: 0.1, ease: [0.87, 0, 0.13, 1] },
-            x: { duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] },
-            y: { duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] },
-            filter: { duration: 0.8, delay: 0.1 }
+            opacity: { duration: 1.0, delay: 0.2 },
+            scale: { duration: 1.4, delay: 0.2, ease: [0.34, 1.56, 0.64, 1] },
+            rotate: { duration: 1.4, delay: 0.2, ease: [0.87, 0, 0.13, 1] },
+            x: { duration: 1.4, delay: 0.2, ease: [0.16, 1, 0.3, 1] },
+            y: { duration: 1.4, delay: 0.2, ease: [0.16, 1, 0.3, 1] },
+            filter: { duration: 1.0, delay: 0.2 }
           }}
           exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.5 } }}
         >
           <SpinningInner
             initial={{ rotate: -180 }}
-            animate={{ rotate: 360 }}
+            animate={animationReady ? { rotate: 360 } : { rotate: -180 }}
             transition={{
               rotate: { repeat: Infinity, duration: 40, ease: "linear" }
             }}
@@ -164,38 +175,45 @@ const BackgroundElements = React.memo(({ xSpring, ySpring }) => {
             y: 500,
             filter: 'blur(30px)'
           }}
-          animate={{
+          animate={animationReady ? {
             opacity: 0.15,
             scale: 1,
             rotate: 0,
             x: 0,
             y: 0,
             filter: 'blur(0px)'
+          } : {
+            opacity: 0,
+            scale: 0.2,
+            rotate: 270,
+            x: 500,
+            y: 500,
+            filter: 'blur(30px)'
           }}
           transition={{
-            duration: 1.4,
-            delay: 0.2,
+            duration: 1.6,
+            delay: 0.4,
             ease: [0.16, 1, 0.3, 1],
-            opacity: { duration: 1.0, delay: 0.2 },
+            opacity: { duration: 1.2, delay: 0.4 },
             scale: {
-              duration: 1.4,
-              delay: 0.2,
+              duration: 1.6,
+              delay: 0.4,
               ease: [0.34, 1.56, 0.64, 1]
             },
             rotate: {
-              duration: 1.4,
-              delay: 0.2,
+              duration: 1.6,
+              delay: 0.4,
               ease: [0.87, 0, 0.13, 1]
             },
-            x: { duration: 1.4, delay: 0.2, ease: [0.16, 1, 0.3, 1] },
-            y: { duration: 1.4, delay: 0.2, ease: [0.16, 1, 0.3, 1] },
-            filter: { duration: 1.0, delay: 0.2 }
+            x: { duration: 1.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] },
+            y: { duration: 1.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] },
+            filter: { duration: 1.2, delay: 0.4 }
           }}
           exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.5, delay: 0.1 } }}
         >
           <SpinningInner
             initial={{ rotate: 270 }}
-            animate={{ rotate: -360 }}
+            animate={animationReady ? { rotate: -360 } : { rotate: 270 }}
             transition={{
               rotate: { repeat: Infinity, duration: 45, ease: "linear" }
             }}

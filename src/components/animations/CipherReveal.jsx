@@ -1,24 +1,30 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import styled from 'styled-components';
 import { motion, useInView } from 'framer-motion';
 
-// --- STYLED COMPONENTS ---
+/**
+ * ELITE CIPHER REVEAL - Award-Winning Text Animation
+ * 
+ * Features:
+ * - Scrambling characters that resolve one by one
+ * - Staggered letter reveal
+ * - Glitch effect during scramble
+ * - Smooth transition to final text
+ * - Works on scroll into view
+ */
+
 const Wrapper = styled.span`
   display: inline-block;
   position: relative;
-  font-family: 'JetBrains Mono', monospace; /* The Tech Font */
-  white-space: nowrap; /* Prevent breaking mid-animation */
+  font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
 `;
 
-const VisibleText = styled(motion.span)`
+const CharSpan = styled(motion.span)`
   display: inline-block;
-  color: ${props => props.$color || 'inherit'};
-  
-  /* Optional: Add a subtle glow to the active scrambling text */
-  &.scrambling {
-    color: #66FCF1; /* Cyber Cyan for the random chars */
-    opacity: 0.7;
-  }
+  color: ${props => props.$resolved ? 'inherit' : '#66FCF1'};
+  transition: color 0.2s ease;
+  text-shadow: ${props => props.$resolved ? 'none' : '0 0 10px rgba(102, 252, 241, 0.5)'};
 `;
 
 const SRText = styled.span`
@@ -33,70 +39,130 @@ const SRText = styled.span`
   border: 0;
 `;
 
-const CHARS = "!@#$%^&*():{};|,.<>/?[]-_=+~";
+// Cyber characters for scrambling effect
+const CHARS = "!@#$%^&*():{};|,.<>/?[]-_=+~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-export default function CipherReveal({ text, delay = 0, speed = 30 }) {
-  const [display, setDisplay] = useState(text.split('').map(() => ' ')); // Start empty
-  const [isScrambling, setIsScrambling] = useState(true);
-  
+const CipherReveal = React.memo(({
+  text,
+  delay = 0,
+  speed = 25,
+  className,
+  style
+}) => {
+  const [displayChars, setDisplayChars] = useState([]);
+  const [hasAnimated, setHasAnimated] = useState(false);
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-5%" });
-  
-  useEffect(() => {
-    if (!isInView || !text) return;
+  const intervalRef = useRef(null);
 
-    let iteration = 0;
-    const maxIterations = text.length;
-    
-    // Delay start
+  // More reliable in-view detection
+  const isInView = useInView(ref, {
+    once: true,
+    margin: "0px 0px -10% 0px",
+    amount: 0.5
+  });
+
+  const getRandomChar = useCallback(() => {
+    return CHARS[Math.floor(Math.random() * CHARS.length)];
+  }, []);
+
+  useEffect(() => {
+    if (!text) return;
+
+    // Initialize with empty spaces
+    setDisplayChars(text.split('').map((char, index) => ({
+      char: ' ',
+      resolved: false,
+      index
+    })));
+  }, [text]);
+
+  useEffect(() => {
+    if (!isInView || hasAnimated || !text) return;
+
+    setHasAnimated(true);
+
+    const chars = text.split('');
+    let currentIndex = 0;
+    let scrambleCount = 0;
+
+    // Start after delay
     const startTimeout = setTimeout(() => {
-      const interval = setInterval(() => {
-        setDisplay(prev => {
-          return text.split("").map((char, index) => {
-            if (index < iteration) {
-              return text[index]; // Resolved character
+      intervalRef.current = setInterval(() => {
+        scrambleCount++;
+
+        setDisplayChars(prev => {
+          return prev.map((item, index) => {
+            // Already resolved characters stay resolved
+            if (index < currentIndex) {
+              return { char: chars[index], resolved: true, index };
             }
-            // Return random character for unresolved parts
-            return CHARS[Math.floor(Math.random() * CHARS.length)];
+
+            // Current character being resolved
+            if (index === currentIndex && scrambleCount % 3 === 0) {
+              return { char: chars[index], resolved: true, index };
+            }
+
+            // Characters still scrambling
+            if (index >= currentIndex) {
+              // Keep spaces as spaces
+              if (chars[index] === ' ') {
+                return { char: ' ', resolved: true, index };
+              }
+              return { char: getRandomChar(), resolved: false, index };
+            }
+
+            return item;
           });
         });
 
-        // Speed of reveal
-        iteration += 1 / 3; 
+        // Move to next character every 3 scrambles
+        if (scrambleCount % 3 === 0) {
+          currentIndex++;
+        }
 
-        if (iteration >= maxIterations) {
-          clearInterval(interval);
-          setIsScrambling(false); // Animation done
-          setDisplay(text.split('')); // Ensure final state is clean
+        // Finish when all characters resolved
+        if (currentIndex >= chars.length) {
+          clearInterval(intervalRef.current);
+          setDisplayChars(chars.map((char, index) => ({
+            char,
+            resolved: true,
+            index
+          })));
         }
       }, speed);
-
-      // Cleanup interval on unmount
-      return () => clearInterval(interval);
     }, delay * 1000);
 
-    return () => clearTimeout(startTimeout);
-  }, [isInView, text, delay, speed]);
+    return () => {
+      clearTimeout(startTimeout);
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [isInView, hasAnimated, text, delay, speed, getRandomChar]);
 
   return (
-    <Wrapper ref={ref}>
-      {/* 1. Accessibility: Read the real text, ignore the glitch */}
+    <Wrapper ref={ref} className={className} style={style}>
       <SRText>{text}</SRText>
-      
-      {/* 2. Visuals: The Glitch Effect */}
+
       <span aria-hidden="true">
-        {display.map((char, i) => (
-          <VisibleText 
+        {displayChars.map((item, i) => (
+          <CharSpan
             key={i}
-            // If this character hasn't resolved yet (it doesn't match real text), make it "scrambling" color
-            className={char !== text[i] ? "scrambling" : ""}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            $resolved={item.resolved}
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.2,
+              delay: 0.02 * i,
+              ease: "easeOut"
+            }}
           >
-            {char}
-          </VisibleText>
+            {item.char === ' ' ? '\u00A0' : item.char}
+          </CharSpan>
         ))}
       </span>
     </Wrapper>
   );
-}
+});
+
+CipherReveal.displayName = 'CipherReveal';
+
+export default CipherReveal;

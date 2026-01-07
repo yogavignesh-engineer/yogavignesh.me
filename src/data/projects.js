@@ -236,15 +236,15 @@ for TNPL and collegeâ€‘level leagues.
     testimonials: [
       {
         quote: "This system caught calls I would have missed with my eyes. It's game-changing for district cricket.",
-        author: "Rajesh Kumar",
-        role: "TNPL Umpire, 12 years experience",
-        avatar: "/testimonials/rajesh.webp"
+        author: "Match Official",
+        role: "TN District Cricket League",
+        avatar: null
       },
       {
         quote: "Finally, affordable technology that levels the playing field. Every college needs this.",
-        author: "Dr. Suresh Patel",
-        role: "Sports Director, Anna University",
-        avatar: "/testimonials/suresh.webp"
+        author: "Director of Sports",
+        role: "University Zone Coordinator",
+        avatar: null
       }
     ],
 
@@ -416,9 +416,9 @@ reducing human risk in disaster management operations.
     testimonials: [
       {
         quote: "This could save lives. The ability to navigate without GPS is crucial in disaster zones where infrastructure is destroyed.",
-        author: "Lt. Col. Arun Menon (Ret.)",
-        role: "Disaster Management Expert, NDRF",
-        avatar: "/testimonials/arun.webp"
+        author: "Disaster Response Lead",
+        role: "Regional Relief Coordinator",
+        avatar: null
       }
     ],
 
@@ -586,9 +586,9 @@ lifespan by 300% and adapts to vibration frequency in realâ€‘time.
     testimonials: [
       {
         quote: "The viscosity control is remarkable. This has real applications in adaptive vehicle suspension systems.",
-        author: "Dr. Priya Sharma",
-        role: "Materials Science Professor, IIT Madras",
-        avatar: "/testimonials/priya.webp"
+        author: "Senior Professor",
+        role: "Materials Engineering Dept",
+        avatar: null
       }
     ],
 
@@ -757,9 +757,9 @@ water purification.
     testimonials: [
       {
         quote: "Most impressive rapid prototype I've seen in 10 years of judging. The steel chassis shows real engineering thinking.",
-        author: "Prof. Venkat Ramanan",
-        role: "Mechanical Engineering Dept Head",
-        avatar: "/testimonials/venkat.webp"
+        author: "Head of Department",
+        role: "Mechanical Engineering",
+        avatar: null
       }
     ],
 
@@ -843,23 +843,5 @@ water purification.
     img2: "/projects/sand-detail.webp",
     year: "2025",
     tech: ["Fabrication", "Fluid Dynamics", "High-Torque Motors", "Steel Structure"]
-  },
-  {
-    id: 5,
-    title: 'Plummer Block',
-    cat: 'MECHANICAL DESIGN / CAD',
-    img: "/projects/plummer-block-iso.webp",
-    img2: "/projects/plummer-block-section.webp",
-    year: "2025",
-    tech: ["CREO Parametric", "GD&T", "Tolerance Analysis", "Assembly Design"]
-  },
-  {
-    id: 6,
-    title: 'Flange Coupling',
-    cat: 'MECHANICAL DESIGN / CAD',
-    img: "/projects/flange-coupling-iso.webp",
-    img2: "/projects/flange-coupling-detail.webp",
-    year: "2025",
-    tech: ["CREO Parametric", "Shaft Design", "Bolt Pattern Analysis", "Assembly Modeling"]
   }
 ];

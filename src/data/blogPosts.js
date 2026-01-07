@@ -129,7 +129,7 @@ This project led to contributions to:
     date: '2024-08-15',
     readTime: '12 min read',
     author: 'S. Yoga Vignesh',
-    image: '/projects/smart-boundary.webp',
+    image: '/projects/smart-boundary.png',
     featured: true
   },
   {
@@ -318,7 +318,7 @@ The best products are **interdisciplinary**. And having one foot in mechanical, 
     date: '2024-09-22',
     readTime: '10 min read',
     author: 'S. Yoga Vignesh',
-    image: '/projects/about-bg.webp',
+    image: '/projects/about-bg.png',
     featured: true
   },
   {
@@ -653,7 +653,7 @@ Treat your React app like a precision machine, and it'll run like one.
     date: '2024-10-10',
     readTime: '15 min read',
     author: 'S. Yoga Vignesh',
-    image: '/projects/portfolio-main.webp',
+    image: '/projects/portfolio-main.png',
     featured: true
   }
 ];

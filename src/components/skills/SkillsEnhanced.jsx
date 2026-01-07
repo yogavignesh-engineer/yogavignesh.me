@@ -500,13 +500,13 @@ const SkillItem = React.memo(({ skill, index, isFeatured, expanded, onExpand }) 
             r="42"
             strokeDasharray={2 * Math.PI * 42}
             initial={{ strokeDashoffset: 2 * Math.PI * 42 }}
-            animate={{ strokeDashoffset: 2 * Math.PI * 42 - (skill.level / 100) * (2 * Math.PI * 42) }}
+            animate={{ strokeDashoffset: 0 }}
             transition={{ duration: 1.5, delay: 0.5 + index * 0.2, ease: 'easeOut' }}
           />
         </CircleSVG>
         <ProgressValue>
-          <ProgressPercent>{skill.level}%</ProgressPercent>
-          <ProgressLabel>Level</ProgressLabel>
+          <ProgressPercent style={{ fontSize: '0.9rem' }}>{skill.levelText}</ProgressPercent>
+          <ProgressLabel>Proficiency</ProgressLabel>
         </ProgressValue>
       </ProgressRing>
 

@@ -67,14 +67,14 @@ const ProjectZoneContainer = styled(motion.div)`
   transition: background-color 0.3s ease;
 
   /* Dynamic Alignment based on prop */
-  align-items: ${props => 
-    props.alignX === 'right' ? 'flex-end' : 
-    props.alignX === 'center' ? 'center' : 
-    'flex-start'};
-  text-align: ${props => 
-    props.alignX === 'right' ? 'right' : 
-    props.alignX === 'center' ? 'center' : 
-    'left'};
+  align-items: ${props =>
+    props.alignX === 'right' ? 'flex-end' :
+      props.alignX === 'center' ? 'center' :
+        'flex-start'};
+  text-align: ${props =>
+    props.alignX === 'right' ? 'right' :
+      props.alignX === 'center' ? 'center' :
+        'left'};
   
   justify-content: ${props => props.alignY === 'top' ? '10vh' : 'flex-start'};
   padding-bottom: ${props => props.alignY === 'top' ? '10vh' : '0'};
@@ -148,11 +148,11 @@ const getAlignment = (index) => ALIGNMENTS[index] || ALIGNMENTS[5];
 // PERFORMANCE: Define outside component to prevent recreation
 const zoneVariants = {
   initial: { opacity: 0, scale: 0.98 },
-  visible: (i) => ({ 
-    opacity: 1, 
+  visible: (i) => ({
+    opacity: 1,
     scale: 1,
-    transition: { 
-      delay: 0.05 + i * 0.05, 
+    transition: {
+      delay: 0.05 + i * 0.05,
       duration: 0.4,
       ease: "easeOut"
     }
@@ -163,7 +163,6 @@ const ProjectZone = React.memo(({ project, index, onSelect, onHoverStart, onHove
   const align = useMemo(() => getAlignment(index), [index]);
 
   const handleClick = useCallback(() => {
-    console.log('[WorksMenu] Project clicked:', project.id, project.title);
     onSelect(project);
   }, [project, onSelect]);
 
@@ -199,7 +198,7 @@ const ProjectZone = React.memo(({ project, index, onSelect, onHoverStart, onHove
         backgroundColor: isActive && isMobile ? 'rgba(102, 252, 241, 0.05)' : 'transparent'
       }}
     >
-      <h3 style={{ 
+      <h3 style={{
         color: isActive && isMobile ? '#66FCF1' : '#111',
         transition: 'all 0.3s ease'
       }}>{project.title}</h3>
@@ -236,7 +235,7 @@ export default function WorksMenu({ onProjectSelect }) {
   const handleHoverStart = useCallback((id) => {
     setActiveId(id);
   }, []);
-  
+
   const handleHoverEnd = useCallback(() => {
     // On mobile, keep active state until selection
     if (!isMobile) {

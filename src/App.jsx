@@ -15,6 +15,7 @@ import HeroLoader from './components/hero/HeroLoader';
 import KonamiCode from './KonamiCode';
 import AvailabilityBadge from './components/ui/AvailabilityBadge';
 import PerformanceMonitor from './components/ui/PerformanceMonitor';
+import MechanicalHUD from './components/ui/MechanicalHUD';
 import { AnimationProvider, useAnimationReady } from './context/AnimationContext';
 import { ScrollProgress } from './components/animations/MicroInteractions';
 import { PageTransition } from './components/animations/PageTransition';
@@ -59,6 +60,11 @@ const SkipToContent = styled.a`
     outline: 3px solid #66FCF1;
     outline-offset: 4px;
   }
+  
+  @media print {
+    display: none !important;
+    visibility: hidden !important;
+  }
 `;
 
 const MainContainer = styled.main`
@@ -87,14 +93,19 @@ function AppContent() {
     // Handle hash navigation (e.g., /#works)
     if (location.hash) {
       setTimeout(() => {
-        const element = document.querySelector(location.hash.replace('#', ''));
-        if (element && lenisRef.current) {
-          lenisRef.current.scrollTo(element, {
-            duration: 0.8,
-            offset: 0
-          });
+        const elementId = location.hash.replace('#', '');
+        const element = document.getElementById(elementId);
+        if (element) {
+          if (lenisRef.current) {
+            lenisRef.current.scrollTo(element, {
+              duration: 0.8,
+              offset: -100
+            });
+          } else {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
         }
-      }, 100);
+      }, 300);
     } else {
       window.scrollTo(0, 0);
     }
@@ -134,6 +145,10 @@ function AppContent() {
   }, []);
 
   const handleNavClick = (section) => {
+    if (section.toLowerCase() === 'resume') {
+      window.location.href = '/resume';
+      return;
+    }
     // For router-based navigation, navigate to home with hash
     window.location.href = `/#${section.toLowerCase().replace(' ', '-')}`;
   };
@@ -144,10 +159,13 @@ function AppContent() {
     setAnimationReady(true);
   };
 
+  const isResumePage = location.pathname === '/resume';
+
   return (
     <CursorProvider>
       <GlobalStyles />
       <CustomCursor />
+      {!loading && <MechanicalHUD />}
       <Grain />
       <ScrollProgress />
       <KonamiCode />
@@ -159,7 +177,10 @@ function AppContent() {
         {loading && isHomePage && <HeroLoader key="loader" onComplete={handleLoaderComplete} />}
       </AnimatePresence>
 
-      <HeroNavbar onNavClick={handleNavClick} style={{ opacity: loading ? 0 : 1, transition: 'opacity 0.5s' }} />
+      {/* Hide navbar during loading, on resume page, and on project detail pages */}
+      {!loading && !isResumePage && !location.pathname.startsWith('/project') && (
+        <HeroNavbar onNavClick={handleNavClick} />
+      )}
 
       <LazyMotion features={domAnimation}>
         <MainContainer id="main-content" role="main">
@@ -167,27 +188,20 @@ function AppContent() {
           {/* Hero is usually outside LazyMotion if it needs instant hydration, but domAnimation is small enough */}
 
           <Suspense fallback={<RouteLoader />}>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/project/:id" element={<ProjectDetailPage />} />
-              <Route path="/blog/:id" element={<BlogPostPage />} />
-              <Route path="/resume" element={<ResumePage />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <AnimatePresence mode="wait">
+              <Routes location={location} key={location.pathname}>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/project/:id" element={<ProjectDetailPage />} />
+                <Route path="/blog/:slug" element={<BlogPostPage />} />
+                <Route path="/resume" element={<ResumePage />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </AnimatePresence>
           </Suspense>
         </MainContainer>
       </LazyMotion>
 
-      {/* Availability Badge - fade in after loading */}
-      <div style={{ opacity: loading ? 0 : 1, transition: 'opacity 0.5s' }}>
-        <AvailabilityBadge
-          status="both"
-          position="fixed"
-          email="yogavignesh.dev@gmail.com"
-          isDark={false}
-          showPopover={true}
-        />
-      </div>
+      {/* AvailabilityBadge removed to avoid navbar overlap */}
 
       {/* Performance Monitor - Toggle with Ctrl+Shift+P */}
       <PerformanceMonitor enabled={true} />

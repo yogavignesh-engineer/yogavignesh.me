@@ -40,7 +40,6 @@ const Works = React.forwardRef(function Works(props, ref) {
   const navigate = useNavigate();
 
   const handleProjectSelect = useCallback((menuItem) => {
-    console.log('[Works] Navigating to project:', menuItem.id);
     // Navigate to project detail page with router
     navigate(`/work/${menuItem.id}`);
   }, [navigate]);
@@ -48,21 +47,21 @@ const Works = React.forwardRef(function Works(props, ref) {
   return (
     <Section ref={ref} data-section="works" id="works">
       {/* Blueprint overlay */}
-      <BlueprintOverlay 
-        variant="light" 
+      <BlueprintOverlay
+        variant="light"
         intensity={0.15}
         showCorners={true}
         showAnnotations={false}
         showScanLine={false}
       />
-      
+
       {/* Section transition */}
-      <SectionTransition 
+      <SectionTransition
         variant="light"
         height="150px"
         label="WORKS_MODULE"
       />
-      
+
       <WorksMenu onProjectSelect={handleProjectSelect} />
     </Section>
   );

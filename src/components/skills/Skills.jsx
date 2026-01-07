@@ -627,10 +627,10 @@ const Skills = React.forwardRef(function Skills(props, ref) {
   const { setCursor } = useCursor();
   const { playHover, playClick } = useSound();
   const sectionRef = useRef(null);
-  
+
   // Particles
   const [particles, setParticles] = useState([]);
-  
+
   useEffect(() => {
     const newParticles = Array.from({ length: 30 }, (_, i) => ({
       id: i,
@@ -665,7 +665,7 @@ const Skills = React.forwardRef(function Skills(props, ref) {
   };
 
   // Flatten all skills
-  const allSkills = SKILLS.flatMap(cat => 
+  const allSkills = SKILLS.flatMap(cat =>
     cat.items.map(skill => ({ ...skill, category: cat.category }))
   );
 
@@ -676,27 +676,27 @@ const Skills = React.forwardRef(function Skills(props, ref) {
   useEffect(() => {
     const progressStates = [
       { value: 90, label: 'SYSTEM UPTIME', status: 'HYDRAULIC PRESSURE NOMINAL' },
-      { value: 75, label: 'CAD PROFICIENCY', status: 'SOLIDWORKS ACTIVE' },
-      { value: 85, label: 'CODE EFFICIENCY', status: 'OPTIMIZATION COMPLETE' },
-      { value: 95, label: 'DESIGN QUALITY', status: 'PRECISION VERIFIED' },
+      { value: 75, label: 'RENDER ENGINE', status: 'SOLIDWORKS ACTIVE' },
+      { value: 85, label: 'SYSTEM LOAD', status: 'OPTIMIZATION COMPLETE' },
+      { value: 95, label: 'GEOMETRY ENGINE', status: 'PRECISION VERIFIED' },
       { value: 80, label: 'PROJECT STATUS', status: 'ON SCHEDULE' }
     ];
-    
+
     let currentIndex = 0;
-    
+
     const interval = setInterval(() => {
       currentIndex = (currentIndex + 1) % progressStates.length;
       setPistonProgress(progressStates[currentIndex].value);
       setPistonLabel(progressStates[currentIndex].label);
     }, 3000); // Change every 3 seconds
-    
+
     return () => clearInterval(interval);
   }, []);
 
   return (
     <Section ref={ref || sectionRef} data-section="skills">
       <ScanLine />
-      
+
       {/* Floating Particles */}
       {particles.map(p => (
         <Particle
@@ -714,7 +714,7 @@ const Skills = React.forwardRef(function Skills(props, ref) {
           }}
         />
       ))}
-      
+
       <Header>
         <Title
           data-text="TECHNICAL ARSENAL"
@@ -728,10 +728,10 @@ const Skills = React.forwardRef(function Skills(props, ref) {
         <Subtitle>
           [[ ENGINEERING CAPABILITIES • OPERATIONAL SYSTEMS • MISSION READY ]]
         </Subtitle>
-        
+
         {/* Piston Progress Bar */}
-        <div style={{ 
-          maxWidth: '700px', 
+        <div style={{
+          maxWidth: '700px',
           margin: '3rem auto 0',
           display: 'flex',
           alignItems: 'center',
@@ -741,8 +741,8 @@ const Skills = React.forwardRef(function Skills(props, ref) {
           padding: '0 1rem'
         }}>
           <div style={{ flex: '1 1 400px', minWidth: 'min(300px, 100%)' }}>
-            <PistonProgressBar 
-              progress={pistonProgress} 
+            <PistonProgressBar
+              progress={pistonProgress}
               height="clamp(50px, 8vw, 60px)"
               maxWidth="100%"
               margin="0"
@@ -752,14 +752,14 @@ const Skills = React.forwardRef(function Skills(props, ref) {
               animated={true}
             />
           </div>
-          <div style={{ 
+          <div style={{
             fontFamily: 'JetBrains Mono, monospace',
             fontSize: 'clamp(0.75rem, 2vw, 0.875rem)',
             color: '#66FCF1',
             textAlign: 'left',
             minWidth: '150px'
           }}>
-            <motion.div 
+            <motion.div
               key={pistonProgress}
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -768,7 +768,7 @@ const Skills = React.forwardRef(function Skills(props, ref) {
             >
               {pistonProgress}%
             </motion.div>
-            <motion.div 
+            <motion.div
               key={pistonLabel}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 0.7, x: 0 }}
@@ -777,7 +777,7 @@ const Skills = React.forwardRef(function Skills(props, ref) {
             >
               {pistonLabel}
             </motion.div>
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 0.5 }}
               style={{ fontSize: 'clamp(0.65rem, 1.5vw, 0.75rem)', marginTop: '0.25rem' }}
@@ -792,18 +792,18 @@ const Skills = React.forwardRef(function Skills(props, ref) {
         {allSkills.map((skill, index) => {
           // Check if we should insert the panel after this skill
           const shouldShowPanelAfter = selectedSkill?.name === skill.name;
-          
+
           return (
             <React.Fragment key={skill.name}>
               <HexagonCard
                 initial={{ opacity: 0, scale: 0.8, rotateY: -180 }}
-                whileInView={{ 
-                  opacity: 1, 
-                  scale: 1, 
+                whileInView={{
+                  opacity: 1,
+                  scale: 1,
                   rotateY: 0
                 }}
-                transition={{ 
-                  duration: 0.6, 
+                transition={{
+                  duration: 0.6,
                   delay: index * 0.05,
                   type: "spring",
                   stiffness: 100
@@ -837,15 +837,16 @@ const Skills = React.forwardRef(function Skills(props, ref) {
                   <LevelBar>
                     <LevelFill
                       initial={{ width: 0 }}
-                      whileInView={{ width: `${skill.level}%` }}
+                      whileInView={{ width: '100%' }}
                       transition={{ duration: 1, delay: index * 0.05 + 0.3 }}
                       viewport={{ once: true }}
+                      style={{ background: 'linear-gradient(90deg, #66FCF1, #FF6B35)' }}
                     />
                   </LevelBar>
-                  <LevelText>{skill.level}% PROFICIENCY</LevelText>
+                  <LevelText>{skill.levelText}</LevelText>
                 </HexagonInner>
               </HexagonCard>
-              
+
               {/* Inline Expandable Detail Panel */}
               <AnimatePresence>
                 {shouldShowPanelAfter && (
@@ -855,99 +856,98 @@ const Skills = React.forwardRef(function Skills(props, ref) {
                     exit={{ opacity: 0, height: 0, scale: 0.95 }}
                     transition={{ type: "spring", stiffness: 150, damping: 20 }}
                   >
-                  <WireframeOverlay />
-                  <CloseButton 
-                    onClick={closeModal}
-                    whileHover={{ scale: 1.2, rotate: 90 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    ×
-                  </CloseButton>
-                  
-                  <PanelGrid>
-                    <PanelLeft>
-                      <LargeIcon>{getIcon(selectedSkill.name)}</LargeIcon>
-                      <PanelTitle>{selectedSkill.name}</PanelTitle>
-                      <PanelVersion>v{selectedSkill.version}</PanelVersion>
-                      <PanelCategory>{selectedSkill.category.replace(/_/g, ' ')}</PanelCategory>
-                      
-                      {/* Circular Progress */}
-                      <ProgressCircle style={{ marginTop: '2rem' }}>
-                        <SVG>
-                          <defs>
-                            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                              <stop offset="0%" stopColor="#FF6B35" />
-                              <stop offset="100%" stopColor="#66FCF1" />
-                            </linearGradient>
-                          </defs>
-                          <CircleBg cx="60" cy="60" r="50" />
-                          <CircleProgress
-                            cx="60"
-                            cy="60"
-                            r="50"
-                            strokeDasharray={314}
-                            initial={{ strokeDashoffset: 314 }}
-                            animate={{ strokeDashoffset: 314 - (314 * selectedSkill.level / 100) }}
-                            transition={{ duration: 1.5, ease: "easeOut" }}
-                          />
-                        </SVG>
-                        <PercentText>{selectedSkill.level}%</PercentText>
-                      </ProgressCircle>
-                    </PanelLeft>
-                    
-                    <PanelRight>
-                      <PanelDesc>
-                        {selectedSkill.desc}
-                      </PanelDesc>
-                      
-                      {/* Stats */}
-                      <div>
-                        <StatRow>
-                          <StatLabel>Proficiency Level</StatLabel>
-                          <StatValue>{selectedSkill.level}%</StatValue>
-                        </StatRow>
-                        <ProgressBar $level={selectedSkill.level} />
-                        
-                        <StatRow>
-                          <StatLabel>Years Experience</StatLabel>
-                          <StatValue>{selectedSkill.experience || '2+'}</StatValue>
-                        </StatRow>
-                        
-                        <StatRow>
-                          <StatLabel>Category</StatLabel>
-                          <StatValue style={{ fontSize: '1rem', textTransform: 'uppercase' }}>
-                            {selectedSkill.category.replace(/_/g, ' ')}
-                          </StatValue>
-                        </StatRow>
-                      </div>
-                      
-                      {/* Use Cases */}
-                      {selectedSkill.details && selectedSkill.details.length > 0 && (
+                    <WireframeOverlay />
+                    <CloseButton
+                      onClick={closeModal}
+                      whileHover={{ scale: 1.2, rotate: 90 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      ×
+                    </CloseButton>
+
+                    <PanelGrid>
+                      <PanelLeft>
+                        <LargeIcon>{getIcon(selectedSkill.name)}</LargeIcon>
+                        <PanelTitle>{selectedSkill.name}</PanelTitle>
+                        <PanelVersion>v{selectedSkill.version}</PanelVersion>
+                        <PanelCategory>{selectedSkill.category.replace(/_/g, ' ')}</PanelCategory>
+
+                        {/* Circular Progress */}
+                        <ProgressCircle style={{ marginTop: '2rem' }}>
+                          <SVG>
+                            <defs>
+                              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stopColor="#FF6B35" />
+                                <stop offset="100%" stopColor="#66FCF1" />
+                              </linearGradient>
+                            </defs>
+                            <CircleBg cx="60" cy="60" r="50" />
+                            <CircleProgress
+                              cx="60"
+                              cy="60"
+                              r="50"
+                              strokeDasharray={314}
+                              initial={{ strokeDashoffset: 314 }}
+                              animate={{ strokeDashoffset: 0 }}
+                              transition={{ duration: 1.5, ease: "easeOut" }}
+                            />
+                          </SVG>
+                          <PercentText style={{ fontSize: '1rem' }}>{selectedSkill.levelText}</PercentText>
+                        </ProgressCircle>
+                      </PanelLeft>
+
+                      <PanelRight>
+                        <PanelDesc>
+                          {selectedSkill.desc}
+                        </PanelDesc>
+
+                        {/* Stats */}
                         <div>
-                          <h3 style={{ 
-                            fontFamily: 'Oswald', 
-                            color: '#66FCF1', 
-                            fontSize: '1.5rem',
-                            marginBottom: '1rem',
-                            textTransform: 'uppercase'
-                          }}>
-                            Application Areas
-                          </h3>
-                          <UseCaseGrid>
-                            {selectedSkill.details.slice(0, 4).map((detail, i) => (
-                              <UseCaseCard key={i}>
-                                <UseCaseTitle>System {i + 1}</UseCaseTitle>
-                                <UseCaseDesc>{detail}</UseCaseDesc>
-                              </UseCaseCard>
-                            ))}
-                          </UseCaseGrid>
+                          <StatRow>
+                            <StatLabel>Proficiency Level</StatLabel>
+                            <StatValue style={{ fontSize: '1.2rem' }}>{selectedSkill.levelText}</StatValue>
+                          </StatRow>
+
+                          <StatRow>
+                            <StatLabel>Years Experience</StatLabel>
+                            <StatValue>{selectedSkill.experience || '2+'}</StatValue>
+                          </StatRow>
+
+                          <StatRow>
+                            <StatLabel>Category</StatLabel>
+                            <StatValue style={{ fontSize: '1rem', textTransform: 'uppercase' }}>
+                              {selectedSkill.category.replace(/_/g, ' ')}
+                            </StatValue>
+                          </StatRow>
                         </div>
-                      )}
-                    </PanelRight>
-                  </PanelGrid>
-                </DetailPanel>
-              )}
-            </AnimatePresence>
+
+                        {/* Use Cases */}
+                        {selectedSkill.details && selectedSkill.details.length > 0 && (
+                          <div>
+                            <h3 style={{
+                              fontFamily: 'Oswald',
+                              color: '#66FCF1',
+                              fontSize: '1.5rem',
+                              marginBottom: '1rem',
+                              textTransform: 'uppercase'
+                            }}>
+                              Application Areas
+                            </h3>
+                            <UseCaseGrid>
+                              {selectedSkill.details.slice(0, 4).map((detail, i) => (
+                                <UseCaseCard key={i}>
+                                  <UseCaseTitle>System {i + 1}</UseCaseTitle>
+                                  <UseCaseDesc>{detail}</UseCaseDesc>
+                                </UseCaseCard>
+                              ))}
+                            </UseCaseGrid>
+                          </div>
+                        )}
+                      </PanelRight>
+                    </PanelGrid>
+                  </DetailPanel>
+                )}
+              </AnimatePresence>
             </React.Fragment>
           );
         })}

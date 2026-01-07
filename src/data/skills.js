@@ -6,7 +6,7 @@ export const SKILLS = [
       {
         name: 'React.js / Next.js',
         version: 'v19.0',
-        level: 90,
+        levelText: 'Advanced',
         experience: '3',
         desc: 'FRONTEND_ECOSYSTEM_FOR_MECHANICAL_STORIES',
         details: [
@@ -18,7 +18,7 @@ export const SKILLS = [
       {
         name: 'Python (Basics)',
         version: 'v3.x',
-        level: 60,
+        levelText: 'Fundamental',
         experience: '2',
         desc: 'SCRIPTS_FOR_DATA_AND_PROTOTYPES',
         details: [
@@ -26,17 +26,17 @@ export const SKILLS = [
           'Comfortable with basic scripting, plotting and automation.'
         ]
       },
-      { 
-        name: "IoT / Embedded C", 
-        level: 85, 
-        version: "C++17", 
+      {
+        name: "IoT / Embedded C",
+        levelText: 'Advanced',
+        version: "C++17",
         experience: '2',
         desc: "HARDWARE_LINK",
         details: [
           'Programmed microcontrollers for the Smart Boundary sensor array.',
           'Managed real-time data acquisition and sensor fusion.',
           'Implemented low-level communication protocols.'
-        ] 
+        ]
       }
     ]
   },
@@ -47,7 +47,7 @@ export const SKILLS = [
       {
         name: 'SolidWorks / CATIA',
         version: 'v5',
-        level: 85,
+        levelText: 'Advanced',
         experience: '3',
         desc: 'CAD_FOR_FIXTURES_AND_PROTOTYPES',
         details: [
@@ -55,29 +55,29 @@ export const SKILLS = [
           'Used for sand filtration and other college‑level prototypes.'
         ]
       },
-      { 
-        name: "Creo Parametric", 
-        level: 85, 
-        version: "10.0", 
+      {
+        name: "Creo Parametric",
+        levelText: 'Advanced',
+        version: "10.0",
         experience: '2',
         desc: "PRO_ENGINEER",
         details: [
           "Applied parametric modeling for robust and editable designs.",
           "Experience with mechanism design and simulation.",
           "Completed advanced tutorials on surface modeling."
-        ] 
+        ]
       },
-      { 
-        name: "AutoCAD", 
-        level: 82, 
-        version: "2025", 
+      {
+        name: "AutoCAD",
+        levelText: 'Intermediate',
+        version: "2025",
         experience: '4',
         desc: "DRAFTING_SUITE",
         details: [
           "Produced detailed 2D manufacturing drawings.",
           "Applied Geometric Dimensioning and Tolerancing (GD&T).",
           "Ensured compliance with technical drawing standards."
-        ] 
+        ]
       }
     ]
   },
@@ -87,7 +87,7 @@ export const SKILLS = [
     items: [
       {
         name: '3D Printing / Rapid Prototyping',
-        level: 95,
+        levelText: 'Advanced',
         version: 'FDM/SLA',
         experience: '4',
         desc: 'ADDITIVE_MFG_FOR_PHYSICAL_TESTING',
@@ -99,7 +99,7 @@ export const SKILLS = [
       },
       {
         name: 'Quality Assurance',
-        level: 80,
+        levelText: 'Intermediate',
         version: 'ISO_9001',
         experience: '2',
         desc: 'ENSURING_RELIABILITY_AND_PERFORMANCE',

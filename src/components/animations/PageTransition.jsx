@@ -100,7 +100,33 @@ const columnVariants = {
   })
 };
 
-// ... (textVariants stays same or updated if needed, keeping simple)
+// Elite text reveal animation
+const textVariants = {
+  initial: {
+    opacity: 0,
+    y: 50,
+    scale: 0.9
+  },
+  animate: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.6,
+      ease: [0.25, 0.46, 0.45, 0.94],
+      delay: 0.3
+    }
+  },
+  exit: {
+    opacity: 0,
+    y: -30,
+    scale: 1.1,
+    transition: {
+      duration: 0.4,
+      ease: [0.76, 0, 0.24, 1]
+    }
+  }
+};
 
 export function PageTransition({ children }) {
   const location = useLocation();

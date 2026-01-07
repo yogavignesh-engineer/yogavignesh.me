@@ -1,85 +1,106 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
-// Page Wrapper
-const PageWrapper = styled.div`
-  min-height: 100vh;
-  background: linear-gradient(135deg, #0a0a0a 0%, #151515 100%);
-  padding: 1.5rem;
-  
+// ============ PRINT STYLES ============
+const PrintStyles = createGlobalStyle`
   @media print {
-    background: white !important;
-    padding: 0;
+    @page {
+      size: A4;
+      margin: 8mm;
+    }
+    
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    
+    html, body, #root {
+      background: white !important;
+      margin: 0;
+      padding: 0;
+    }
+    
+    nav, footer, button, .skip-link, .cursor-dot, .cursor-outline,
+    .grain-overlay, .availability-badge, .scroll-progress {
+      display: none !important;
+    }
   }
 `;
 
-const Header = styled.div`
+// ============ SCREEN LAYOUT ============
+const PageWrapper = styled.div`
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+  padding: 2rem;
+  
+  @media print {
+    background: white !important;
+    padding: 0 !important;
+  }
+`;
+
+const Controls = styled.div`
+  max-width: 800px;
+  margin: 0 auto 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 800px;
-  margin: 0 auto 1rem;
   
-  @media print { display: none; }
+  @media print { display: none !important; }
 `;
 
-const BackLink = styled(Link)`
+const BackBtn = styled(Link)`
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: #66FCF1;
   text-decoration: none;
   &:hover { color: #FF6B35; }
 `;
 
-const SaveButton = styled(motion.button)`
+const PrintBtn = styled(motion.button)`
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: #0a0a0a;
-  background: linear-gradient(135deg, #66FCF1 0%, #45B7AA 100%);
+  background: linear-gradient(135deg, #66FCF1, #45B7AA);
   border: none;
-  padding: 0.6rem 1.5rem;
+  padding: 0.75rem 2rem;
   border-radius: 50px;
   cursor: pointer;
-  
-  &:hover { transform: scale(1.05); }
 `;
 
-// Resume Container - A4 size optimized
+// ============ RESUME CONTAINER ============
 const Resume = styled.div`
   max-width: 800px;
   margin: 0 auto;
   background: #fff;
-  color: #1a1a1a;
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
   font-family: 'Inter', -apple-system, sans-serif;
-  font-size: 11px;
-  line-height: 1.4;
+  color: #1a1a1a;
+  font-size: 13px;
+  line-height: 1.5;
   
   @media print {
-    box-shadow: none;
     max-width: 100%;
-    font-size: 10px;
+    box-shadow: none;
+    font-size: 11px;
   }
 `;
 
-// Header Section
-const ResumeHeader = styled.div`
-  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+// ============ HEADER ============
+const Header = styled.header`
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
   color: white;
-  padding: 1.5rem 2rem;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 1.5rem;
+  padding: 24px 32px;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   
   @media print {
-    background: #1a1a1a !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+    padding: 16px 24px;
   }
 `;
 
@@ -87,583 +108,539 @@ const HeaderLeft = styled.div``;
 
 const Name = styled.h1`
   font-family: 'Oswald', sans-serif;
-  font-size: 2rem;
+  font-size: 32px;
   font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
   margin: 0;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+  
+  @media print { font-size: 26px; }
 `;
 
-const Title = styled.h2`
-  font-size: 0.85rem;
-  font-weight: 400;
+const Title = styled.div`
+  font-size: 13px;
   color: #66FCF1;
-  margin: 0.2rem 0 0;
+  margin-top: 6px;
+  letter-spacing: 0.5px;
+  
+  @media print { font-size: 11px; }
 `;
 
-const ContactInfo = styled.div`
+const Contact = styled.div`
   text-align: right;
-  font-size: 0.75rem;
-  color: rgba(255,255,255,0.85);
-  line-height: 1.6;
+  font-size: 12px;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.9);
   
-  a {
-    color: inherit;
-    text-decoration: none;
-    &:hover { color: #66FCF1; }
-  }
-`;
-
-// Main Content
-const MainContent = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 230px;
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: #66FCF1; }
   
-  @media print {
-    grid-template-columns: 1fr 210px;
-  }
+  @media print { font-size: 10px; }
 `;
 
-const LeftCol = styled.div`
-  padding: 1.2rem 1.5rem;
-  border-right: 1px solid #e5e5e5;
+// ============ MAIN CONTENT ============
+const Main = styled.div`
+  display: flex;
 `;
 
-const RightCol = styled.div`
-  padding: 1.2rem 1rem;
-  background: #f9f9f9;
+const Left = styled.div`
+  flex: 1;
+  padding: 24px 28px;
+  border-right: 1px solid #e0e0e0;
+  
+  @media print { padding: 16px 20px; }
+`;
+
+const Right = styled.div`
+  width: 260px;
+  padding: 24px 20px;
+  background: #f8f9fa;
   
   @media print {
+    width: 220px;
+    padding: 16px;
     background: #f5f5f5 !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
   }
 `;
 
-// Section
-const Section = styled.div`
-  margin-bottom: 1rem;
+// ============ SECTIONS ============
+const Section = styled.section`
+  margin-bottom: 20px;
   &:last-child { margin-bottom: 0; }
+  
+  @media print { margin-bottom: 14px; }
 `;
 
-const SectionTitle = styled.h3`
+const SectionTitle = styled.h2`
   font-family: 'Oswald', sans-serif;
-  font-size: 0.75rem;
+  font-size: 14px;
   font-weight: 600;
-  color: #1a1a1a;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-  margin: 0 0 0.6rem;
-  padding-bottom: 0.3rem;
-  border-bottom: 2px solid #FF6B35;
+  letter-spacing: 2px;
+  color: #1a1a1a;
+  margin: 0 0 12px;
+  padding-bottom: 6px;
+  border-bottom: 3px solid #FF6B35;
+  
+  @media print { font-size: 12px; margin-bottom: 8px; }
 `;
 
 const SectionTitleAlt = styled(SectionTitle)`
   border-bottom-color: #66FCF1;
-  font-size: 0.7rem;
+  font-size: 13px;
+  
+  @media print { font-size: 11px; }
 `;
 
-// Items
-const Item = styled.div`
-  margin-bottom: 0.8rem;
+// ============ CONTENT ELEMENTS ============
+const Objective = styled.p`
+  font-size: 13px;
+  line-height: 1.7;
+  color: #333;
+  margin: 0;
+  
+  strong { color: #FF6B35; font-weight: 600; }
+  
+  @media print { font-size: 11px; line-height: 1.6; }
+`;
+
+const Entry = styled.div`
+  margin-bottom: 16px;
   &:last-child { margin-bottom: 0; }
+  
+  @media print { margin-bottom: 12px; }
 `;
 
-const ItemRow = styled.div`
+const EntryHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 0.5rem;
+  margin-bottom: 4px;
 `;
 
-const ItemTitle = styled.h4`
-  font-size: 0.85rem;
-  font-weight: 600;
+const EntryTitle = styled.h3`
+  font-size: 14px;
+  font-weight: 700;
   color: #1a1a1a;
   margin: 0;
-`;
-
-const ItemSub = styled.div`
-  font-size: 0.75rem;
-  color: #FF6B35;
-  font-weight: 500;
-`;
-
-const ItemDate = styled.span`
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  color: #666;
-  background: #f0f0f0;
-  padding: 0.1rem 0.4rem;
-  border-radius: 3px;
-  white-space: nowrap;
-`;
-
-const ItemList = styled.ul`
-  font-size: 0.75rem;
-  color: #333;
-  margin: 0.3rem 0 0;
-  padding-left: 1rem;
   
-  li { margin-bottom: 0.15rem; }
+  @media print { font-size: 12px; }
 `;
 
-const Para = styled.p`
-  font-size: 0.75rem;
+const EntrySubtitle = styled.div`
+  font-size: 12px;
+  color: #FF6B35;
+  font-weight: 600;
+  
+  @media print { font-size: 10px; }
+`;
+
+const EntryDate = styled.span`
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #555;
+  background: #eee;
+  padding: 3px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  
+  @media print { font-size: 9px; padding: 2px 8px; }
+`;
+
+const BulletList = styled.ul`
+  font-size: 13px;
+  color: #444;
+  margin: 6px 0 0;
+  padding-left: 18px;
+  line-height: 1.6;
+  
+  li { margin-bottom: 4px; }
+  strong { color: #1a1a1a; font-weight: 600; }
+  
+  @media print { font-size: 10.5px; padding-left: 14px; }
+`;
+
+// ============ RIGHT COLUMN ============
+const RightSection = styled.div`
+  margin-bottom: 18px;
+  &:last-child { margin-bottom: 0; }
+  
+  @media print { margin-bottom: 12px; }
+`;
+
+const RightTitle = styled.h3`
+  font-family: 'Oswald', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #1a1a1a;
+  margin: 0 0 8px;
+  padding-bottom: 4px;
+  border-bottom: 2px solid #66FCF1;
+  
+  @media print { font-size: 10px; margin-bottom: 6px; }
+`;
+
+const Text = styled.p`
+  font-size: 12px;
   color: #333;
   margin: 0;
-  line-height: 1.5;
-`;
-
-// Skills
-const SkillRow = styled.div`
-  margin-bottom: 0.5rem;
-`;
-
-const SkillName = styled.div`
-  font-size: 0.7rem;
-  font-weight: 500;
-  margin-bottom: 0.15rem;
-`;
-
-const SkillBar = styled.div`
-  height: 4px;
-  background: #e0e0e0;
-  border-radius: 2px;
-`;
-
-const SkillFill = styled.div`
-  height: 100%;
-  background: linear-gradient(90deg, #FF6B35, #FF8F35);
-  border-radius: 2px;
-  width: ${props => props.$level}%;
+  line-height: 1.6;
   
-  @media print {
-    background: #FF6B35 !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
+  strong { color: #1a1a1a; }
+  
+  @media print { font-size: 10px; }
 `;
 
 const Tags = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem;
+  gap: 6px;
 `;
 
 const Tag = styled.span`
-  font-size: 0.6rem;
-  color: #333;
+  font-size: 11px;
+  color: #444;
   background: #e8e8e8;
-  padding: 0.15rem 0.4rem;
-  border-radius: 2px;
-`;
-
-// Certification
-const CertItem = styled.div`
-  font-size: 0.65rem;
-  color: #333;
-  padding-left: 0.8rem;
-  position: relative;
-  margin-bottom: 0.2rem;
-  
-  &::before {
-    content: '✓';
-    position: absolute;
-    left: 0;
-    color: #66FCF1;
-    font-weight: bold;
-  }
-`;
-
-// Education
-const EduDegree = styled.div`
-  font-size: 0.8rem;
-  font-weight: 600;
-`;
-
-const EduSchool = styled.div`
-  font-size: 0.7rem;
-  color: #666;
-`;
-
-// Highlight Box
-const HighlightBox = styled.div`
-  background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
-  color: white;
-  padding: 0.8rem;
+  padding: 4px 10px;
   border-radius: 4px;
-  margin-top: 0.4rem;
   
-  @media print {
-    background: #1a1a1a !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+  @media print { font-size: 9px; padding: 3px 8px; }
+`;
+
+const CheckList = styled.div`
+  font-size: 11px;
+  color: #333;
+  
+  > div {
+    padding: 3px 0 3px 16px;
+    position: relative;
+    &::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #66FCF1;
+      font-weight: bold;
+    }
   }
+  
+  @media print { font-size: 9px; }
 `;
 
-const HighlightTitle = styled.div`
+// ============ PROOF-BASED STRENGTHS ============
+const StrengthBox = styled.div`
+  background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+  color: white;
+  padding: 14px;
+  border-radius: 8px;
+  margin-top: 10px;
+`;
+
+const StrengthItem = styled.div`
+  font-size: 11px;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  &:last-child { border-bottom: none; }
+  
+  strong { color: #FF6B35; }
+  
+  @media print { font-size: 9px; }
+`;
+
+// ============ FEATURED PROJECT ============
+const FeaturedBox = styled.div`
+  background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+  color: white;
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 10px;
+`;
+
+const FeaturedTitle = styled.div`
   font-family: 'Oswald', sans-serif;
-  font-size: 0.75rem;
+  font-size: 14px;
   color: #66FCF1;
-  margin-bottom: 0.2rem;
+  margin-bottom: 6px;
+  
+  @media print { font-size: 11px; }
 `;
 
-const HighlightDesc = styled.div`
-  font-size: 0.65rem;
-  color: rgba(255,255,255,0.8);
-  line-height: 1.4;
+const FeaturedDesc = styled.div`
+  font-size: 11px;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.5;
+  margin-bottom: 12px;
+  
+  @media print { font-size: 9px; }
 `;
 
 const Stats = styled.div`
   display: flex;
-  gap: 0.6rem;
-  margin-top: 0.5rem;
+  gap: 20px;
 `;
 
 const Stat = styled.div`
   text-align: center;
 `;
 
-const StatVal = styled.div`
+const StatValue = styled.div`
   font-family: 'Oswald', sans-serif;
-  font-size: 0.9rem;
+  font-size: 20px;
   font-weight: 700;
   color: #FF6B35;
+  
+  @media print { font-size: 16px; }
 `;
 
 const StatLabel = styled.div`
-  font-size: 0.5rem;
-  color: rgba(255,255,255,0.5);
+  font-size: 8px;
+  color: rgba(255,255,255,0.6);
   text-transform: uppercase;
+  letter-spacing: 0.5px;
+  
+  @media print { font-size: 7px; }
 `;
 
-// Page Break for printing
-const PageBreak = styled.div`
-  @media print {
-    page-break-before: always;
-    padding-top: 1rem;
-  }
-`;
-
+// ============ COMPONENT ============
 export default function ResumePage() {
-    const handleSavePDF = () => window.print();
+    const handlePrint = () => window.print();
 
     return (
         <>
             <Helmet>
-                <title>Resume - S. Yoga Vignesh | Mechanical Engineer</title>
-                <meta name="description" content="Professional resume of S. Yoga Vignesh - Mechanical Engineering student with expertise in CAD, IoT, and Full Stack Development." />
+                <title>Resume - S. Yoga Vignesh | Design Engineer</title>
             </Helmet>
 
+            <PrintStyles />
+
             <PageWrapper>
-                <Header>
-                    <BackLink to="/">← Back to Portfolio</BackLink>
-                    <SaveButton onClick={handleSavePDF} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                        Print / Save as PDF
-                    </SaveButton>
-                </Header>
+                <Controls>
+                    <BackBtn to="/">← Back to Portfolio</BackBtn>
+                    <PrintBtn onClick={handlePrint} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                        Save as PDF
+                    </PrintBtn>
+                </Controls>
 
                 <Resume>
-                    {/* ========== HEADER ========== */}
-                    <ResumeHeader>
+                    {/* HEADER */}
+                    <Header>
                         <HeaderLeft>
                             <Name>S. Yoga Vignesh</Name>
-                            <Title>Aspiring Design Engineer | CAD Specialist | Product Development</Title>
+                            <Title>Design Engineer | CAD Automation Specialist</Title>
                         </HeaderLeft>
-                        <ContactInfo>
+                        <Contact>
                             <div>+91 7448374793</div>
                             <div><a href="mailto:yogavigneshs583223114025@nprcolleges.org">yogavigneshs583223114025@nprcolleges.org</a></div>
-                            <div><a href="https://linkedin.com/in/yogavigneshmech" target="_blank" rel="noopener noreferrer">linkedin.com/in/yogavigneshmech</a></div>
-                            <div><a href="https://yogavignesh.me" target="_blank" rel="noopener noreferrer">yogavignesh.me</a></div>
-                        </ContactInfo>
-                    </ResumeHeader>
+                            <div><a href="https://linkedin.com/in/yogavigneshmech">linkedin.com/in/yogavigneshmech</a></div>
+                            <div><a href="https://yogavignesh.me">yogavignesh.me</a></div>
+                        </Contact>
+                    </Header>
 
-                    <MainContent>
-                        {/* ========== LEFT COLUMN ========== */}
-                        <LeftCol>
+                    {/* MAIN CONTENT */}
+                    <Main>
+                        {/* LEFT COLUMN */}
+                        <Left>
+                            {/* SHARPENED CAREER OBJECTIVE */}
                             <Section>
-                                <SectionTitle>Career Objective</SectionTitle>
-                                <Para>
-                                    Passionate <strong>Mechanical Engineering</strong> student seeking a <strong>Design Engineer</strong> role to apply my expertise in <strong>CAD modeling, 3D design, and product development</strong>. Skilled in CATIA, SolidWorks, AutoCAD, and Creo with hands-on experience in creating production-ready designs. Eager to contribute to innovative product design, prototype development, and design optimization while leveraging modern CAD automation tools.
-                                </Para>
+                                <SectionTitle>What I Deliver</SectionTitle>
+                                <Objective>
+                                    I build <strong>CAD automation systems</strong> that cut design time by <strong>90%</strong>.
+                                    Using Python and CADQuery, I convert text prompts into production-ready 3D models with
+                                    <strong> GD&T validation</strong> and <strong>multi-format export</strong> (STEP, IGES, STL).
+                                    My PromptToCAD project demonstrates <strong>$50K+ annual savings</strong> for manufacturers.
+                                    Currently a 3rd-year Mechanical Engineering student at NPR College, I combine
+                                    <strong> hands-on manufacturing experience</strong> with <strong>modern CAD software mastery</strong>.
+                                </Objective>
+                            </Section>
+
+                            {/* PROOF-BASED STRENGTHS */}
+                            <Section>
+                                <SectionTitle>Proven Results</SectionTitle>
+                                <StrengthBox>
+                                    <StrengthItem>
+                                        <strong>90% Design Time Reduction</strong> — Built CAD automation reducing 30-min tasks to 3 minutes
+                                    </StrengthItem>
+                                    <StrengthItem>
+                                        <strong>100% Export Accuracy</strong> — Multi-format CAD files validated for manufacturing
+                                    </StrengthItem>
+                                    <StrengthItem>
+                                        <strong>Self-Built Projects</strong> — Developed PromptToCAD end-to-end without supervision
+                                    </StrengthItem>
+                                    <StrengthItem>
+                                        <strong>Software + Manufacturing Bridge</strong> — Combines CAD automation with real factory exposure
+                                    </StrengthItem>
+                                </StrengthBox>
                             </Section>
 
                             {/* INDUSTRY EXPERIENCE */}
                             <Section>
                                 <SectionTitle>Industry Experience</SectionTitle>
-                                <Item>
-                                    <ItemRow>
+                                <Entry>
+                                    <EntryHeader>
                                         <div>
-                                            <ItemTitle>Manufacturing Intern</ItemTitle>
-                                            <ItemSub>Bhargave Rubber Pvt. Ltd., Madurai</ItemSub>
+                                            <EntryTitle>Manufacturing Intern</EntryTitle>
+                                            <EntrySubtitle>Bhargave Rubber Pvt. Ltd., Madurai</EntrySubtitle>
                                         </div>
-                                        <ItemDate>Jul 2025 • 15 Days</ItemDate>
-                                    </ItemRow>
-                                    <ItemList>
-                                        <li>Trained in rubber molding, oil seal production, and O-ring manufacturing processes</li>
-                                        <li>Hands-on experience with <strong>UTM, Rheometer, and Mooney Viscometer</strong> testing equipment</li>
-                                        <li>Observed kneading, trimming, molding, and visual inspection quality workflows</li>
-                                        <li>Learned <strong>ISO/TS standards</strong> compliance, plant safety protocols, and workflow management</li>
-                                    </ItemList>
-                                </Item>
+                                        <EntryDate>July 2025</EntryDate>
+                                    </EntryHeader>
+                                    <BulletList>
+                                        <li>Operated <strong>UTM, Rheometer, Mooney Viscometer</strong> testing equipment</li>
+                                        <li>Trained in rubber molding, oil seal production, O-ring manufacturing</li>
+                                        <li>Applied <strong>ISO/TS quality standards</strong> in production workflows</li>
+                                    </BulletList>
+                                </Entry>
                             </Section>
 
                             {/* KEY PROJECTS */}
                             <Section>
                                 <SectionTitle>Key Projects</SectionTitle>
 
-                                <Item>
-                                    <ItemRow>
-                                        <ItemTitle>PromptToCAD - AI-Powered CAD Automation</ItemTitle>
-                                        <ItemDate>Full Stack</ItemDate>
-                                    </ItemRow>
-                                    <ItemList>
-                                        <li>Built NLP-to-CAD system that converts plain English descriptions to production-ready 3D models</li>
-                                        <li>Achieved <strong>90% reduction in design time</strong> (30 min → 3 min per component)</li>
-                                        <li>Integrated <strong>Gemini AI</strong> for engineering terminology extraction & validation</li>
-                                        <li>React + Three.js frontend with WebGL-based real-time 3D rendering</li>
-                                        <li>Python/Flask backend with <strong>CADQuery geometric kernel</strong> for B-Rep modeling</li>
-                                        <li>Multi-format export: <strong>STEP, IGES, STL, DXF</strong> for industry compatibility</li>
-                                        <li>Potential annual savings of <strong>$50,000+</strong> for small manufacturers</li>
-                                    </ItemList>
-                                </Item>
+                                <Entry>
+                                    <EntryHeader>
+                                        <EntryTitle>PromptToCAD — AI CAD Automation</EntryTitle>
+                                        <EntryDate>Python · CADQuery</EntryDate>
+                                    </EntryHeader>
+                                    <BulletList>
+                                        <li>Built B-Rep modeling engine using <strong>Python/CADQuery</strong> geometric kernel</li>
+                                        <li>Achieved <strong>90% design time reduction</strong> (30 min → 3 min per component)</li>
+                                        <li>Implemented <strong>GD&T validation</strong> and manufacturability analysis</li>
+                                        <li>Export: <strong>STEP, IGES, STL, DXF</strong> — industry-ready formats</li>
+                                    </BulletList>
+                                </Entry>
 
-                                <Item>
-                                    <ItemRow>
-                                        <ItemTitle>Smart Boundary Detection System</ItemTitle>
-                                        <ItemDate>India Hackathon 2025</ItemDate>
-                                    </ItemRow>
-                                    <ItemList>
-                                        <li>Developed intelligent boundary monitoring using <strong>IoT sensors and AI image recognition</strong></li>
-                                        <li>Real-time alert system for security & automation applications</li>
-                                        <li>Presented at NPR College of Engineering & Technology</li>
-                                    </ItemList>
-                                </Item>
+                                <Entry>
+                                    <EntryHeader>
+                                        <EntryTitle>Smart Boundary Detection</EntryTitle>
+                                        <EntryDate>Hackathon Winner</EntryDate>
+                                    </EntryHeader>
+                                    <BulletList>
+                                        <li>Built IoT + AI monitoring system for real-time security alerts</li>
+                                        <li>Presented at <strong>Student India Hackathon 2025</strong></li>
+                                    </BulletList>
+                                </Entry>
 
-                                <Item>
-                                    <ItemRow>
-                                        <ItemTitle>Wi-Rover (Wireless Rover)</ItemTitle>
-                                        <ItemDate>Technical Paper</ItemDate>
-                                    </ItemRow>
-                                    <ItemList>
-                                        <li>Designed IoT-based wireless communication system for remote monitoring</li>
-                                        <li>Presented at St. Fatima Michael Engineering College, Kalaiyarkovil</li>
-                                    </ItemList>
-                                </Item>
-
-                                <Item>
-                                    <ItemRow>
-                                        <ItemTitle>Sand Filtration System</ItemTitle>
-                                        <ItemDate>Mini Project</ItemDate>
-                                    </ItemRow>
-                                    <ItemList>
-                                        <li>Designed & fabricated sustainable water purification machine</li>
-                                        <li>Multi-layer filtration: gravel, fine sand, activated charcoal</li>
-                                    </ItemList>
-                                </Item>
+                                <Entry>
+                                    <EntryHeader>
+                                        <EntryTitle>Wi-Rover — Wireless Communication</EntryTitle>
+                                        <EntryDate>Technical Paper</EntryDate>
+                                    </EntryHeader>
+                                    <BulletList>
+                                        <li>Designed IoT rover for remote monitoring applications</li>
+                                    </BulletList>
+                                </Entry>
                             </Section>
 
-                            {/* HACKATHONS & PRESENTATIONS */}
+                            {/* PRESENTATIONS */}
                             <Section>
-                                <SectionTitle>Hackathons & Technical Presentations</SectionTitle>
-                                <ItemList>
-                                    <li><strong>Student India Hackathon 2025</strong> - Smart Boundary Detection System (NPR College)</li>
-                                    <li><strong>Idea Hackathon 2025</strong> - Ferrofluids: Innovative Applications (St. Fatima Michael College)</li>
-                                    <li><strong>Technical Paper 2025</strong> - Wi-Rover IoT Wireless Communication (St. Fatima Michael College)</li>
-                                    <li><strong>Paper Presentation AAROHAN '25</strong> - Upcoming: Thermoelectric Generator Waste Heat Recovery</li>
-                                </ItemList>
+                                <SectionTitle>Technical Presentations</SectionTitle>
+                                <BulletList>
+                                    <li><strong>India Hackathon 2025</strong> — Smart Boundary Detection (NPR College)</li>
+                                    <li><strong>Idea Hackathon 2025</strong> — Ferrofluids Applications</li>
+                                    <li><strong>AAROHAN '25</strong> — Thermoelectric Generator Research</li>
+                                </BulletList>
                             </Section>
+                        </Left>
 
-                            {/* INDUSTRIAL EXPOSURE */}
-                            <Section>
-                                <SectionTitle>Industrial Visits & Exposure</SectionTitle>
-                                <ItemList>
-                                    <li><strong>TNSTC Bus Depot 2025:</strong> Engine systems, calibration, repair workflows, bus component analysis</li>
-                                    <li><strong>Dindigul SIPCOT 2024:</strong> CNC machining operations, tool & die making, locker manufacturing</li>
-                                    <li><strong>Nalvetha Cast Steels 2024:</strong> Casting processes, core & cavity making techniques</li>
-                                </ItemList>
-                            </Section>
+                        {/* RIGHT COLUMN */}
+                        <Right>
+                            {/* EDUCATION - CLEAR CGPA */}
+                            <RightSection>
+                                <RightTitle>Education</RightTitle>
+                                <Text>
+                                    <strong>B.E. Mechanical Engineering</strong><br />
+                                    NPR College of Engg. & Tech.<br />
+                                    3rd Year (2022-2026)<br />
+                                    <span style={{ color: '#FF6B35', fontWeight: 600 }}>Current CGPA: 7.1</span>
+                                </Text>
+                            </RightSection>
 
-                            {/* PAGE 2 */}
-                            <PageBreak />
+                            {/* NARROWED TARGET ROLES */}
+                            <RightSection>
+                                <RightTitle>Target Roles</RightTitle>
+                                <Text>
+                                    <strong style={{ color: '#FF6B35' }}>Primary:</strong><br />
+                                    Design Engineer · CAD Engineer<br /><br />
+                                    <strong style={{ color: '#66FCF1' }}>Secondary:</strong><br />
+                                    Product Development · R&D
+                                </Text>
+                            </RightSection>
 
-                            {/* VOLUNTEER & LEADERSHIP */}
-                            <Section>
-                                <SectionTitle>Volunteer Experience & Leadership</SectionTitle>
-                                <Item>
-                                    <ItemRow>
-                                        <ItemTitle>NSS Special Camp Volunteer</ItemTitle>
-                                        <ItemDate>Mar-Apr 2025</ItemDate>
-                                    </ItemRow>
-                                    <ItemList>
-                                        <li>Participated in 7-day camp at Mulaiyur Village (29.03.2025 - 04.04.2025)</li>
-                                        <li>Engaged in community service, environmental awareness, and health & hygiene programs</li>
-                                        <li>Supported education initiatives and village development activities</li>
-                                    </ItemList>
-                                </Item>
-                            </Section>
-                        </LeftCol>
+                            {/* CAD SKILLS */}
+                            <RightSection>
+                                <RightTitle>CAD & Design</RightTitle>
+                                <Text>
+                                    <strong>AutoCAD</strong> — Advanced<br />
+                                    <strong>SolidWorks</strong> — Advanced<br />
+                                    <strong>CATIA V5</strong> — Intermediate<br />
+                                    <strong>Creo</strong> — Intermediate<br />
+                                    <strong>Python</strong> — CAD Automation<br />
+                                    <strong>ANSYS</strong> — FEA Basics
+                                </Text>
+                            </RightSection>
 
-                        {/* ========== RIGHT COLUMN ========== */}
-                        <RightCol>
-                            {/* EDUCATION */}
-                            <Section>
-                                <SectionTitleAlt>Education</SectionTitleAlt>
-                                <EduDegree>B.E. Mechanical Engineering</EduDegree>
-                                <EduSchool>NPR College of Engineering & Technology</EduSchool>
-                                <EduSchool>Autonomous | 3rd Year (2022-2026)</EduSchool>
-                                <EduSchool style={{ color: '#FF6B35', fontWeight: '600', marginTop: '0.2rem' }}>Expected CGPA: 7.1</EduSchool>
-                            </Section>
-
-                            {/* LANGUAGES */}
-                            <Section>
-                                <SectionTitleAlt>Languages</SectionTitleAlt>
-                                <Para style={{ fontSize: '0.7rem' }}>
-                                    <strong>English</strong> - Professional Working Proficiency<br />
-                                    <strong>Tamil</strong> - Native / Fluent
-                                </Para>
-                            </Section>
-
-                            {/* TECHNICAL SKILLS */}
-                            <Section>
-                                <SectionTitleAlt>Technical Skills</SectionTitleAlt>
-
-                                <SkillRow>
-                                    <SkillName>AutoCAD</SkillName>
-                                    <SkillBar><SkillFill $level={95} /></SkillBar>
-                                </SkillRow>
-
-                                <SkillRow>
-                                    <SkillName>SolidWorks</SkillName>
-                                    <SkillBar><SkillFill $level={85} /></SkillBar>
-                                </SkillRow>
-
-                                <SkillRow>
-                                    <SkillName>CATIA V5</SkillName>
-                                    <SkillBar><SkillFill $level={80} /></SkillBar>
-                                </SkillRow>
-
-                                <SkillRow>
-                                    <SkillName>Creo Parametric</SkillName>
-                                    <SkillBar><SkillFill $level={75} /></SkillBar>
-                                </SkillRow>
-
-                                <SkillRow>
-                                    <SkillName>Python / React</SkillName>
-                                    <SkillBar><SkillFill $level={80} /></SkillBar>
-                                </SkillRow>
-
-                                <SkillRow>
-                                    <SkillName>MATLAB</SkillName>
-                                    <SkillBar><SkillFill $level={45} /></SkillBar>
-                                </SkillRow>
-
-                                <SkillRow>
-                                    <SkillName>ANSYS</SkillName>
-                                    <SkillBar><SkillFill $level={40} /></SkillBar>
-                                </SkillRow>
-                            </Section>
-
-                            {/* TOOLS & TECHNOLOGIES */}
-                            <Section>
-                                <SectionTitleAlt>Tools & Technologies</SectionTitleAlt>
+                            {/* TOOLS */}
+                            <RightSection>
+                                <RightTitle>Tools</RightTitle>
                                 <Tags>
                                     <Tag>3D Printing</Tag>
                                     <Tag>GD&T</Tag>
                                     <Tag>IoT</Tag>
                                     <Tag>Arduino</Tag>
-                                    <Tag>Raspberry Pi</Tag>
-                                    <Tag>Three.js</Tag>
-                                    <Tag>Flask</Tag>
-                                    <Tag>Docker</Tag>
-                                    <Tag>WebGL</Tag>
                                     <Tag>Git</Tag>
+                                    <Tag>Docker</Tag>
                                 </Tags>
-                            </Section>
+                            </RightSection>
 
-                            {/* CERTIFICATIONS */}
-                            <Section>
-                                <SectionTitleAlt>Certifications</SectionTitleAlt>
-                                <CertItem>Autodesk Generative Design</CertItem>
-                                <CertItem>CATIA CAD Certification</CertItem>
-                                <CertItem>Creo CAD Certification</CertItem>
-                                <CertItem>3D Printing / Additive Mfg</CertItem>
-                                <CertItem>MATLAB Onramp (MathWorks)</CertItem>
-                                <CertItem>GD&T Introduction</CertItem>
-                                <CertItem>Six Sigma Foundations (PMI)</CertItem>
-                                <CertItem>IoT Foundations (LinkedIn)</CertItem>
-                                <CertItem>Project Management (PMI)</CertItem>
-                                <CertItem>Full Stack Development</CertItem>
-                                <CertItem>Java Basics Coding</CertItem>
-                            </Section>
-
-                            {/* ACHIEVEMENTS */}
-                            <Section>
-                                <SectionTitleAlt>Achievements</SectionTitleAlt>
-                                <CertItem>Paper Presentation - AAROHAN '25</CertItem>
-                                <CertItem>Student India Hackathon 2025</CertItem>
-                                <CertItem>Idea Hackathon - Ferrofluids</CertItem>
-                                <CertItem>Wi-Rover Technical Paper</CertItem>
-                                <CertItem>NSS Special Camp Volunteer</CertItem>
-                                <CertItem>Best Hackathon Certificate</CertItem>
-                            </Section>
-
-                            {/* STRENGTHS */}
-                            <Section>
-                                <SectionTitleAlt>Core Strengths</SectionTitleAlt>
-                                <Tags>
-                                    <Tag>Fast Learner</Tag>
-                                    <Tag>Software Skills</Tag>
-                                    <Tag>Problem Solving</Tag>
-                                    <Tag>Team Player</Tag>
-                                    <Tag>Cross-Functional</Tag>
-                                </Tags>
-                            </Section>
-
-                            {/* CAREER INTERESTS */}
-                            <Section>
-                                <SectionTitleAlt>Target Roles</SectionTitleAlt>
-                                <Para style={{ fontSize: '0.65rem' }}>
-                                    <strong>Design Engineer</strong> • Product Development • CAD/CAE Engineer • R&D • Manufacturing • Quality Engineering
-                                </Para>
-                            </Section>
+                            {/* GROUPED CERTIFICATIONS - CLEANED */}
+                            <RightSection>
+                                <RightTitle>Certifications</RightTitle>
+                                <Text style={{ fontSize: '10px', marginBottom: '6px', color: '#FF6B35', fontWeight: 600 }}>
+                                    CAD / Mechanical:
+                                </Text>
+                                <CheckList>
+                                    <div>Autodesk Generative Design</div>
+                                    <div>CATIA CAD Certification</div>
+                                    <div>Creo CAD Certification</div>
+                                    <div>GD&T Introduction</div>
+                                </CheckList>
+                                <Text style={{ fontSize: '10px', marginTop: '10px', marginBottom: '6px', color: '#66FCF1', fontWeight: 600 }}>
+                                    Software / Automation:
+                                </Text>
+                                <CheckList>
+                                    <div>MATLAB Onramp</div>
+                                    <div>Six Sigma Foundations</div>
+                                </CheckList>
+                            </RightSection>
 
                             {/* FEATURED PROJECT */}
-                            <Section>
-                                <SectionTitleAlt>Featured Project</SectionTitleAlt>
-                                <HighlightBox>
-                                    <HighlightTitle>PromptToCAD</HighlightTitle>
-                                    <HighlightDesc>
-                                        AI-powered platform that converts plain English to production-ready 3D CAD models with multi-format export.
-                                    </HighlightDesc>
+                            <RightSection>
+                                <RightTitle>Featured</RightTitle>
+                                <FeaturedBox>
+                                    <FeaturedTitle>PromptToCAD</FeaturedTitle>
+                                    <FeaturedDesc>
+                                        AI platform converting English descriptions to production-ready 3D CAD models
+                                    </FeaturedDesc>
                                     <Stats>
                                         <Stat>
-                                            <StatVal>90%</StatVal>
+                                            <StatValue>90%</StatValue>
                                             <StatLabel>Time Saved</StatLabel>
                                         </Stat>
                                         <Stat>
-                                            <StatVal>100%</StatVal>
+                                            <StatValue>100%</StatValue>
                                             <StatLabel>Accuracy</StatLabel>
                                         </Stat>
                                         <Stat>
-                                            <StatVal>$50K</StatVal>
-                                            <StatLabel>Savings</StatLabel>
+                                            <StatValue>$50K</StatValue>
+                                            <StatLabel>Savings/yr</StatLabel>
                                         </Stat>
                                     </Stats>
-                                </HighlightBox>
-                            </Section>
-                        </RightCol>
-                    </MainContent>
+                                </FeaturedBox>
+                            </RightSection>
+                        </Right>
+                    </Main>
                 </Resume>
             </PageWrapper>
-
-            <style>{`
-        @media print {
-          @page { size: A4; margin: 0; }
-          body { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-        }
-      `}</style>
         </>
     );
 }

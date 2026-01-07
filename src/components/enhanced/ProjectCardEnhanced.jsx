@@ -323,8 +323,8 @@ const ProjectCardEnhanced = ({ project, onClick }) => {
 
   const contentVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
       transition: {
         staggerChildren: 0.1,
@@ -335,8 +335,8 @@ const ProjectCardEnhanced = ({ project, onClick }) => {
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
       transition: { duration: 0.4 }
     }
@@ -364,6 +364,8 @@ const ProjectCardEnhanced = ({ project, onClick }) => {
             src={project.img || '/projects/placeholder.webp'}
             alt={project.title}
             loading="lazy"
+            layoutId={`project-image-${project.id}`}
+            transition={{ duration: 0.6, ease: [0.6, 0.01, -0.05, 0.9] }}
             style={{
               scale: isHovered ? 1.1 : 1
             }}
@@ -379,17 +381,21 @@ const ProjectCardEnhanced = ({ project, onClick }) => {
           <CategoryTag variants={itemVariants}>
             {project.cat || project.category}
           </CategoryTag>
-          
-          <Title variants={itemVariants}>
+
+          <Title
+            variants={itemVariants}
+            layoutId={`project-title-${project.id}`}
+            transition={{ duration: 0.6, ease: [0.6, 0.01, -0.05, 0.9] }}
+          >
             {project.title}
           </Title>
-          
+
           {project.subtitle && (
             <Description variants={itemVariants}>
               {project.subtitle}
             </Description>
           )}
-          
+
           {project.tech && project.tech.length > 0 && (
             <TechStack variants={itemVariants}>
               {project.tech.slice(0, 4).map((tech, index) => (
@@ -406,16 +412,16 @@ const ProjectCardEnhanced = ({ project, onClick }) => {
 
         <HoverIndicator
           initial={{ scale: 0, rotate: -180 }}
-          animate={isHovered ? { 
-            scale: 1, 
+          animate={isHovered ? {
+            scale: 1,
             rotate: 0,
-            transition: { 
+            transition: {
               type: "spring",
               stiffness: 300,
               damping: 20
             }
-          } : { 
-            scale: 0, 
+          } : {
+            scale: 0,
             rotate: -180,
             transition: { duration: 0.2 }
           }}
